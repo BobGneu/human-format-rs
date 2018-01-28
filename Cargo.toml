@@ -1,0 +1,7 @@
+[package]
+name = "human_format"
+version = "0.1.0"
+authors = ["Bob Chatman <bob.chatman@gmail.com>"]
+
+[dev-dependencies]
+galvanic-test = "0.1.3"
