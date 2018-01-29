@@ -24,6 +24,5 @@ matrix:
       compiler: clang
 
 script:
-  - cargo fmt -- --write-mode=diff
   - cargo test --verbose
   - cargo build --release --verbose --all
