@@ -25,20 +25,20 @@
 //! let tmpStr = human_format::Formatter::new()
 //!     .format(1000.0);
 //! # assert_eq!(tmpStr, "1.00 k");
-//! 
+//!
 //! // "1.00 M"
 //! let tmpStr2 = human_format::Formatter::new()
 //!     .format(1000000.0);
 //! # assert_eq!(tmpStr2, "1.00 M");
-//! 
+//!
 //! // "1.00 B"
 //! let tmpStr3 = human_format::Formatter::new()
 //!     .format(1000000000.0);
 //! # assert_eq!(tmpStr3, "1.00 B");
 //! ```
-//! 
+//!
 //! If you are so inspired you can even try playing with units and customizing your `Scales`
-//! 
+//!
 //! For more examples you should review the examples on github: [tests/demo.rs](https://github.com/BobGneu/human-format-rs/blob/master/tests/demo.rs)
 //!
 
