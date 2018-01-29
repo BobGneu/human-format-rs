@@ -153,7 +153,6 @@ impl Scales {
         Scales::SI()
     }
 
-    #[rustfmt_skip]
     /// Instantiates a new `Scales` with SI keys
     pub fn SI() -> Self {
         Scales {
@@ -172,7 +171,6 @@ impl Scales {
         }
     }
 
-    #[rustfmt_skip]
     /// Instantiates a new `Scales` with Binary keys
     pub fn Binary() -> Self {
         Scales {
