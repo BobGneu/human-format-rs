@@ -6,11 +6,16 @@ license = "MIT"
 description = "Rust Port of human-format from node, formatting numbers for us, while the machines are still at bay."
 homepage = "https://github.com/BobGneu/human-format-rs"
 repository = "https://github.com/BobGneu/human-format-rs"
+documentation = "https://docs.rs/human_format"
 readme = "README.md"
+
+[lib]
+name = "human_format"
+path = "src/lib.rs"
 
 [badges]
 travis-ci = { repository = "BobGneu/human-format-rs" }
-appveyor = { repository = "BobGneu/human-format-rs"}
+appveyor =  { repository = "BobGneu/human-format-rs" }
 
 [dev-dependencies]
 galvanic-test = "0.1.3"

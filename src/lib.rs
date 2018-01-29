@@ -1,9 +1,54 @@
+#![doc(html_root_url = "https://docs.rs/human_format")]
+
+//! `human_format` provides facilitates creating a formatted string, converting between numbers that are beyond typical
+//! needs for humans into a simpler string that conveys the gist of the meaning of the number.
+//!
+//! ## Setup
+//!
+//! Add the library to your dependencies listing
+//!
+//! ```toml
+//! [dependencies]
+//! human_format = "0.2"
+//! ```
+//!
+//! Add the crate reference at your crate root
+//!
+//! ```rust
+//! extern crate human_format;
+//! ```
+//!
+//! Print some human readable strings
+//!
+//! ```rust
+//! // "1.00 k"
+//! let tmpStr = human_format::Formatter::new()
+//!     .format(1000.0);
+//! # assert_eq!(tmpStr, "1.00 k");
+//!
+//! // "1.00 M"
+//! let tmpStr2 = human_format::Formatter::new()
+//!     .format(1000000.0);
+//! # assert_eq!(tmpStr2, "1.00 M");
+//!
+//! // "1.00 B"
+//! let tmpStr3 = human_format::Formatter::new()
+//!     .format(1000000000.0);
+//! # assert_eq!(tmpStr3, "1.00 B");
+//! ```
+//!
+//! If you are so inspired you can even try playing with units and customizing your `Scales`
+//!
+//! For more examples you should review the examples on github: [tests/demo.rs](https://github.com/BobGneu/human-format-rs/blob/master/tests/demo.rs)
+//!
+
 #[derive(Debug)]
 struct ScaledValue {
     value: f32,
     suffix: String,
 }
 
+/// Entry point to the lib. Use this to handle your formatting needs.
 #[derive(Debug)]
 pub struct Formatter {
     decimals: usize,
@@ -13,6 +58,7 @@ pub struct Formatter {
     forced_suffix: String,
 }
 
+/// Provide a customized scaling scheme for your own modeling.
 #[derive(Debug)]
 pub struct Scales {
     base: u32,
@@ -20,6 +66,7 @@ pub struct Scales {
 }
 
 impl Formatter {
+    /// Initializes a new `Formatter` with default values.
     pub fn new() -> Self {
         Formatter {
             decimals: 2,
@@ -30,36 +77,42 @@ impl Formatter {
         }
     }
 
+    /// Sets the decimals value for formatting the string.
     pub fn with_decimals(&mut self, decimals: usize) -> &mut Self {
         self.decimals = decimals;
 
         self
     }
 
+    /// Sets the separator value for formatting the string.
     pub fn with_separator(&mut self, separator: &str) -> &mut Self {
         self.separator = separator.to_owned();
 
         self
     }
 
+    /// Sets the scales value.
     pub fn with_scales(&mut self, scales: Scales) -> &mut Self {
         self.scales = scales;
 
         self
     }
 
+    /// Sets the units value.
     pub fn with_units(&mut self, units: &str) -> &mut Self {
         self.forced_units = units.to_owned();
 
         self
     }
 
+    /// Sets the expected suffix value.
     pub fn with_suffix(&mut self, suffix: &str) -> &mut Self {
         self.forced_suffix = suffix.to_owned();
 
         self
     }
 
+    /// Formats the number into a string
     pub fn format(&self, value: f64) -> String {
         if value < 0.0 {
             return format!("-{}", self.format(value * -1.0));
@@ -77,6 +130,7 @@ impl Formatter {
         )
     }
 
+    /// Parse a string back into a float value.
     pub fn parse(&self, value: &str) -> f64 {
         let v: Vec<&str> = value.split(&self.separator).collect();
 
@@ -94,10 +148,12 @@ impl Formatter {
 }
 
 impl Scales {
+    /// Instantiates a new `Scales` with SI keys
     pub fn new() -> Self {
         Scales::SI()
     }
 
+    /// Instantiates a new `Scales` with SI keys
     pub fn SI() -> Self {
         Scales {
             base: 1000,
@@ -115,6 +171,7 @@ impl Scales {
         }
     }
 
+    /// Instantiates a new `Scales` with Binary keys
     pub fn Binary() -> Self {
         Scales {
             base: 1000,
@@ -132,12 +189,14 @@ impl Scales {
         }
     }
 
+    /// Sets the base for the `Scales`
     pub fn with_base(&mut self, base: u32) -> &mut Self {
         self.base = base;
 
         self
     }
 
+    /// Sets the suffixes listing appropriately
     pub fn with_suffixes(&mut self, suffixes: Vec<String>) -> &mut Self {
         self.suffixes = Vec::new();
 
@@ -148,7 +207,7 @@ impl Scales {
         self
     }
 
-    pub fn get_magnitude_multipler(&self, value: &str) -> f64 {
+    fn get_magnitude_multipler(&self, value: &str) -> f64 {
         let ndx = 0;
 
         for ndx in 0..self.suffixes.len() {
