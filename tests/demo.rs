@@ -36,7 +36,7 @@ test_suite! {
     test should_allow_use_of_binary_scale_explicitly() {
         assert_eq!(Formatter::new()
             .with_scales(Scales::Binary())
-            .format(1024 as f64),
+            .format(1000 as f64),
             "1.00 ki");
     }
 
@@ -44,8 +44,16 @@ test_suite! {
         assert_eq!(Formatter::new()
             .with_scales(Scales::Binary())
             .with_units("B")
-            .format(1024 as f64),
-            "1.00 kiB");
+            .format(100000 as f64),
+            "100.00 kiB");
+    }
+
+    test should_output_10_24MiB() {
+        assert_eq!(Formatter::new()
+            .with_scales(Scales::Binary())
+            .with_units("B")
+            .format(10240000 as f64),
+            "10.24 MiB");
     }
 
     test should_allow_explicit_suffix_and_unit() {
@@ -78,13 +86,13 @@ test_suite! {
     test should_allow_parsing_binary_values_to_f64() {
         assert_eq!(Formatter::new()
             .with_scales(Scales::Binary())
-            .parse("1.00 ki"), 1024.0);
+            .parse("1.00 ki"), 1000.0);
     }
 
     test should_allow_parsing_binary_values_with_units_to_f64() {
         assert_eq!(Formatter::new()
             .with_scales(Scales::Binary())
             .with_units("B")
-            .parse("1.00 kiB"), 1024.0);
+            .parse("1.00 kiB"), 1000.0);
     }
 }

@@ -117,7 +117,7 @@ impl Scales {
 
     pub fn Binary() -> Self {
         Scales {
-            base: 1024,
+            base: 1000,
             suffixes: [
                 "".to_owned(),
                 "ki".to_owned(),
