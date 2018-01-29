@@ -31,5 +31,6 @@ matrix:
       compiler: clang
 
 script:
+  - cargo fmt
   - cargo test --verbose
   - cargo build --release --verbose --all
