@@ -12,7 +12,6 @@ readme = "README.md"
 [lib]
 name = "human_format"
 path = "src/lib.rs"
-doc = true
 
 [badges]
 travis-ci = { repository = "BobGneu/human-format-rs" }
