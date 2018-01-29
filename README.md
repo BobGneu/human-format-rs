@@ -24,10 +24,39 @@ extern crate human_format;
 
 3. Print some human readable strings
 
+## Examples
+
 ```rust 
-println!("{}", Formatter::new().format(1000 as f64)); // outputs 1.00 k
-println!("{}", Formatter::new().with_decimals(2).format(1337 as f64)); // outputs 1.34 k
-println!("{}", Formatter::new().with_decimals(1).format(1337 as f64)); // outputs 1.3 k
+// 1.00 k
+Formatter::new()
+    .format(1000 as f64)); 
+
+// 1.34 k
+Formatter::new()
+    .with_decimals(2)
+    .format(1337 as f64);
+
+// 1.3 k
+Formatter::new()
+    .with_decimals(1)
+    .format(1337 as f64);
+
+// 1.3B
+Formatter::new()
+    .with_decimals(1)
+    .with_separator("")
+    .format(1337000000 as f64);
+
+// 1.00 - k
+Formatter::new()
+    .with_separator(" - ")
+    .format(1000 as f64);
+
+// 1.00 kiB
+Formatter::new()
+    .with_scales(Scales::Binary())
+    .with_units("B")
+    .format(1024 as f64);
 ```
 
 For more examples please consult [tests/demo.rs](https://github.com/BobGneu/human-format-rs/blob/master/tests/demo.rs)
