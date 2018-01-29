@@ -22,26 +22,26 @@ test_suite! {
         assert_eq!(Formatter::new()
             .with_separator(" - ")
             .format(1000 as f64), 
-            "1.0 - k");
+            "1.00 - k");
     }
 
     test should_allow_use_of_SI_scale_explicitly() {
         assert_eq!(Formatter::new()
-            .with_scales(&Scales::SI())
+            .with_scales(Scales::SI())
             .format(1000 as f64), 
             "1.00 k");
     }
 
     test should_allow_use_of_BINARY_scale_explicitly() {
         assert_eq!(Formatter::new()
-            .with_scales(&Scales::Binary())
-            .format(1000 as f64), 
+            .with_scales(Scales::Binary())
+            .format(1024 as f64), 
             "1.00 ki");
     }
 
     test should_allow_use_of_BINARY_units_explicitly() {
         assert_eq!(Formatter::new()
-            .with_scales(&Scales::Binary())
+            .with_scales(Scales::Binary())
             .with_units("B")
             .format(1024 as f64), 
             "1.00 kiB");
@@ -56,11 +56,14 @@ test_suite! {
     }
 
     test should_allow_use_of_explicit_scale() {
+        let mut scales = Scales::new();
+
+        scales
+            .with_base(1024)
+            .with_suffixes(["".to_owned(),"ki".to_owned(), "Mi".to_owned(), "Gi".to_owned(), "Ti".to_owned(), "Pi".to_owned(), "Ei".to_owned(), "Zi".to_owned(), "Yi".to_owned()].to_vec());
+
         assert_eq!(Formatter::new()
-            .with_scales(&Scales::new()
-                .with_base(1024)
-                .with_suffixes(["".to_owned(),"ki".to_owned(), "Mi".to_owned(), "Gi".to_owned(), "Ti".to_owned(), "Pi".to_owned(), "Ei".to_owned(), "Zi".to_owned(), "Yi".to_owned()].to_vec(), 1)
-            )
+            .with_scales(scales)
             .with_units("B")
             .format(1024 as f64), 
             "1.00 kiB");
