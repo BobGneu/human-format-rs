@@ -71,7 +71,18 @@ impl Formatter {
     }
 
     pub fn parse(&self, value: &str) -> f64 {
-        0.0
+        let v: Vec<&str> = value.split(&self.separator).collect();
+
+        let result = v.get(0).unwrap().parse::<f64>().unwrap();
+
+        let mut suffix = v.get(1).unwrap().to_string();
+        let new_len = suffix.len() - self.forced_units.len();
+
+        suffix.truncate(new_len);
+
+        let magnitude_multiplier = self.scales.get_magnitude_multipler(&suffix);
+
+        (result * magnitude_multiplier)
     }
 }
 
@@ -109,6 +120,20 @@ impl Scales {
 
         self
     } 
+
+    pub fn get_magnitude_multipler(&self, value: &str) -> f64 {
+        let ndx = 0;
+
+        for ndx in 0..self.suffixes.len() {
+            println!("{}", self.suffixes[ndx]);
+
+            if value == self.suffixes[ndx] {
+                return self.base.pow(ndx as u32) as f64;
+            }
+        }
+
+        return 0.0;        
+    }
 
     fn to_scaled_value(&self, value: f64) -> ScaledValue {
         let mut index: usize = 0;

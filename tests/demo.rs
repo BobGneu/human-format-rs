@@ -76,6 +76,14 @@ test_suite! {
 
     test should_allow_parsing_binary_values_to_f64() {
         assert_eq!(Formatter::new()
+            .with_scales(Scales::Binary())
+            .parse("1.00 ki"), 1024.0);
+    }
+
+    test should_allow_parsing_binary_values_with_units_to_f64() {
+        assert_eq!(Formatter::new()
+            .with_scales(Scales::Binary())
+            .with_units("B")
             .parse("1.00 kiB"), 1024.0);
     }
 }
