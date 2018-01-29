@@ -1,6 +1,6 @@
 [package]
 name = "human_format"
-version = "1.0.0"
+version = "1.0.1"
 authors = ["Bob Chatman <bob.chatman@gmail.com>"]
 license = "MIT"
 description = "Rust Port of human-format from node, formatting numbers for us, while the machines are still at bay."
