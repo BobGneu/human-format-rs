@@ -16,8 +16,22 @@ notifications:
 matrix:
   include:
     - os: linux
+      rust: stable
+      compiler: gcc
+    - os: linux
+      rust: beta
+      compiler: gcc
+    - os: linux
       rust: nightly
       compiler: gcc
+    - os: osx
+      rust: stable
+      osx_image: xcode9
+      compiler: clang
+    - os: osx
+      rust: beta
+      osx_image: xcode9
+      compiler: clang
     - os: osx
       rust: nightly
       osx_image: xcode9
