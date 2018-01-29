@@ -1,22 +1,22 @@
 #[derive(Debug)]
 struct ScaledValue {
     value: f32,
-    suffix: String
+    suffix: String,
 }
 
 #[derive(Debug)]
-pub struct Formatter  {
+pub struct Formatter {
     decimals: usize,
     separator: String,
     scales: Scales,
     forced_units: String,
-    forced_suffix: String
+    forced_suffix: String,
 }
 
 #[derive(Debug)]
 pub struct Scales {
     base: u32,
-    suffixes: Vec<String>
+    suffixes: Vec<String>,
 }
 
 impl Formatter {
@@ -26,7 +26,7 @@ impl Formatter {
             separator: " ".to_owned(),
             scales: Scales::SI(),
             forced_units: "".to_owned(),
-            forced_suffix: "".to_owned()
+            forced_suffix: "".to_owned(),
         }
     }
 
@@ -67,7 +67,14 @@ impl Formatter {
 
         let scaled_value = self.scales.to_scaled_value(value);
 
-        format!("{:.width$}{}{}{}", scaled_value.value, self.separator, scaled_value.suffix, self.forced_units, width = self.decimals)
+        format!(
+            "{:.width$}{}{}{}",
+            scaled_value.value,
+            self.separator,
+            scaled_value.suffix,
+            self.forced_units,
+            width = self.decimals
+        )
     }
 
     pub fn parse(&self, value: &str) -> f64 {
@@ -94,14 +101,34 @@ impl Scales {
     pub fn SI() -> Self {
         Scales {
             base: 1000,
-            suffixes: ["".to_owned(), "k".to_owned(), "M".to_owned(), "B".to_owned(), "T".to_owned(), "P".to_owned(), "E".to_owned(), "Z".to_owned(), "Y".to_owned()].to_vec()
+            suffixes: [
+                "".to_owned(),
+                "k".to_owned(),
+                "M".to_owned(),
+                "B".to_owned(),
+                "T".to_owned(),
+                "P".to_owned(),
+                "E".to_owned(),
+                "Z".to_owned(),
+                "Y".to_owned(),
+            ].to_vec(),
         }
     }
 
     pub fn Binary() -> Self {
         Scales {
             base: 1024,
-            suffixes: ["".to_owned(),"ki".to_owned(), "Mi".to_owned(), "Gi".to_owned(), "Ti".to_owned(), "Pi".to_owned(), "Ei".to_owned(), "Zi".to_owned(), "Yi".to_owned()].to_vec()
+            suffixes: [
+                "".to_owned(),
+                "ki".to_owned(),
+                "Mi".to_owned(),
+                "Gi".to_owned(),
+                "Ti".to_owned(),
+                "Pi".to_owned(),
+                "Ei".to_owned(),
+                "Zi".to_owned(),
+                "Yi".to_owned(),
+            ].to_vec(),
         }
     }
 
@@ -119,7 +146,7 @@ impl Scales {
         }
 
         self
-    } 
+    }
 
     pub fn get_magnitude_multipler(&self, value: &str) -> f64 {
         let ndx = 0;
@@ -132,7 +159,7 @@ impl Scales {
             }
         }
 
-        return 0.0;        
+        return 0.0;
     }
 
     fn to_scaled_value(&self, value: f64) -> ScaledValue {
@@ -148,11 +175,17 @@ impl Scales {
             index += 1;
         }
 
-        println!("\t\t{}: {} {} --- {}", value, index, self.base.pow(index as u32), value / (self.base.pow(index as u32) as f64));
+        println!(
+            "\t\t{}: {} {} --- {}",
+            value,
+            index,
+            self.base.pow(index as u32),
+            value / (self.base.pow(index as u32) as f64)
+        );
 
         ScaledValue {
             value: (value / self.base.pow((index) as u32) as f64) as f32,
-            suffix: self.suffixes[index].to_owned()
+            suffix: self.suffixes[index].to_owned(),
         }
     }
 }

@@ -1,7 +1,16 @@
 [package]
 name = "human_format"
-version = "0.1.0"
+version = "1.0.0"
 authors = ["Bob Chatman <bob.chatman@gmail.com>"]
+license = "MIT"
+description = "Rust Port of human-format from node, formatting numbers for us, while the machines are still at bay."
+homepage = "https://github.com/BobGneu/human-format-rs"
+repository = "https://github.com/BobGneu/human-format-rs"
+readme = "README.md"
+
+[badges]
+travis-ci = { repository = "BobGneu/human-format-rs" }
+appveyor = { repository = "BobGneu/human-format-rs"}
 
 [dev-dependencies]
 galvanic-test = "0.1.3"

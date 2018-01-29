@@ -1,49 +1,50 @@
-#[macro_use] extern crate galvanic_test;
+#[macro_use]
+extern crate galvanic_test;
 extern crate human_format;
 
 test_suite! {
-    name demo_examples;    
+    name demo_examples;
     use human_format::*;
 
-    test should_allow_use_of_SI_scale_implicitly() {
+    test should_allow_use_of_si_scale_implicitly() {
         assert_eq!(Formatter::new()
-            .format(1000 as f64), 
+            .format(1000 as f64),
             "1.00 k");
     }
 
     test should_allow_explicit_decimals() {
         assert_eq!(Formatter::new()
             .with_decimals(1)
-            .format(1000 as f64), 
+            .format(1000 as f64),
             "1.0 k");
     }
 
     test should_allow_explicit_separator() {
         assert_eq!(Formatter::new()
             .with_separator(" - ")
-            .format(1000 as f64), 
+            .format(1000 as f64),
             "1.00 - k");
     }
 
-    test should_allow_use_of_SI_scale_explicitly() {
+    test should_allow_use_of_si_scale_explicitly() {
         assert_eq!(Formatter::new()
             .with_scales(Scales::SI())
-            .format(1000 as f64), 
+            .format(1000 as f64),
             "1.00 k");
     }
 
-    test should_allow_use_of_BINARY_scale_explicitly() {
+    test should_allow_use_of_binary_scale_explicitly() {
         assert_eq!(Formatter::new()
             .with_scales(Scales::Binary())
-            .format(1024 as f64), 
+            .format(1024 as f64),
             "1.00 ki");
     }
 
-    test should_allow_use_of_BINARY_units_explicitly() {
+    test should_allow_use_of_binary_units_explicitly() {
         assert_eq!(Formatter::new()
             .with_scales(Scales::Binary())
             .with_units("B")
-            .format(1024 as f64), 
+            .format(1024 as f64),
             "1.00 kiB");
     }
 
@@ -51,7 +52,7 @@ test_suite! {
         assert_eq!(Formatter::new()
             .with_suffix("k")
             .with_units("m")
-            .format(1024 as f64), 
+            .format(1024 as f64),
             "1.02 km");
     }
 
@@ -65,7 +66,7 @@ test_suite! {
         assert_eq!(Formatter::new()
             .with_scales(scales)
             .with_units("B")
-            .format(1024 as f64), 
+            .format(1024 as f64),
             "1.00 kiB");
     }
 
