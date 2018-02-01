@@ -197,10 +197,12 @@ impl Scales {
     }
 
     /// Sets the suffixes listing appropriately
-    pub fn with_suffixes(&mut self, suffixes: Vec<String>) -> &mut Self {
+    pub fn with_suffixes(&mut self, suffixes: Vec<&str>) -> &mut Self {
         self.suffixes = Vec::new();
 
         for suffix in suffixes {
+            // This should be to_owned to be clear about intent. 
+            // https://users.rust-lang.org/t/to-string-vs-to-owned-for-string-literals/1441/6
             self.suffixes.push(suffix.to_owned());
         }
 
