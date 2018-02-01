@@ -201,7 +201,7 @@ impl Scales {
         self.suffixes = Vec::new();
 
         for suffix in suffixes {
-            // This should be to_owned to be clear about intent. 
+            // This should be to_owned to be clear about intent.
             // https://users.rust-lang.org/t/to-string-vs-to-owned-for-string-literals/1441/6
             self.suffixes.push(suffix.to_owned());
         }
