@@ -157,7 +157,7 @@ impl Scales {
     pub fn SI() -> Self {
         Scales {
             base: 1000,
-            suffixes: [
+            suffixes: vec![
                 "".to_owned(),
                 "k".to_owned(),
                 "M".to_owned(),
@@ -167,7 +167,7 @@ impl Scales {
                 "E".to_owned(),
                 "Z".to_owned(),
                 "Y".to_owned(),
-            ].to_vec(),
+            ],
         }
     }
 
@@ -175,7 +175,7 @@ impl Scales {
     pub fn Binary() -> Self {
         Scales {
             base: 1000,
-            suffixes: [
+            suffixes: vec![
                 "".to_owned(),
                 "ki".to_owned(),
                 "Mi".to_owned(),
@@ -185,7 +185,7 @@ impl Scales {
                 "Ei".to_owned(),
                 "Zi".to_owned(),
                 "Yi".to_owned(),
-            ].to_vec(),
+            ],
         }
     }
 
