@@ -69,7 +69,7 @@ test_suite! {
 
         scales
             .with_base(1024)
-            .with_suffixes(["".to_owned(),"ki".to_owned(), "Mi".to_owned(), "Gi".to_owned(), "Ti".to_owned(), "Pi".to_owned(), "Ei".to_owned(), "Zi".to_owned(), "Yi".to_owned()].to_vec());
+            .with_suffixes(vec!["","ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi", "Yi"]);
 
         assert_eq!(Formatter::new()
             .with_scales(scales)
