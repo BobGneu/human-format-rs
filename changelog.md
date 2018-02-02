@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.0.2] - 2018-02-01
+
+### Fixed
+
+* Corrected issue with API, expecting owned strings when the common occurance will be references. 
+
 ## [1.0.1] - 2018-01-28
 
 ### Added
@@ -18,5 +24,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 Initial Release
 
 [Unreleased]: https://github.com/BobGneu/human-format-rs/compare/master...develop
+[1.0.2]: https://github.com/BobGneu/human-format-rs/compare/1.0.1...1.0.2
 [1.0.1]: https://github.com/BobGneu/human-format-rs/compare/1.0.0...1.0.1
 [1.0.0]: https://github.com/BobGneu/human-format-rs/tree/1.0.0
