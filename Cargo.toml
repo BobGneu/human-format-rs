@@ -9,7 +9,7 @@ repository = "https://github.com/BobGneu/human-format-rs"
 documentation = "https://docs.rs/human_format"
 readme = "README.md"
 license-file = "LICENSE"
-keywords = ["numbers", "formatting", "byte", "distance", "bytes", "file", "filesize", "human", "humanized", "pretty", "readable", "si", "size", "unit", "magnitude"]
+keywords = ["numbers", "formatting", "filesize", "human", "magnitude"]
 categories = ["value-formatting", "no-std"]
 
 [lib]
