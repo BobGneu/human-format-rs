@@ -1,6 +1,6 @@
 [package]
 name = "human_format"
-version = "1.0.1"
+version = "1.0.3"
 authors = ["Bob Chatman <bob.chatman@gmail.com>"]
 license = "MIT"
 description = "Rust Port of human-format from node, formatting numbers for us, while the machines are still at bay."
@@ -9,7 +9,7 @@ repository = "https://github.com/BobGneu/human-format-rs"
 documentation = "https://docs.rs/human_format"
 readme = "README.md"
 license-file = "LICENSE"
-keywords = ["numbers", "formatting", "byte", "distance", "bytes", "file", "filesize", "human", "humanized", "pretty", "readable", "si", "size", "unit", "magnitude"]
+keywords = ["numbers", "formatting", "filesize", "human", "magnitude"]
 categories = ["value-formatting", "no-std"]
 
 [lib]

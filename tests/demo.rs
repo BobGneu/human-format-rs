@@ -9,51 +9,59 @@ test_suite! {
     test should_allow_use_of_si_scale_implicitly() {
         assert_eq!(Formatter::new()
             .format(1000 as f64),
-            "1.00 k");
+            "1.00 K");
     }
 
     test should_allow_explicit_decimals() {
         assert_eq!(Formatter::new()
             .with_decimals(1)
             .format(1000 as f64),
-            "1.0 k");
+            "1.0 K");
     }
 
     test should_allow_explicit_separator() {
         assert_eq!(Formatter::new()
             .with_separator(" - ")
             .format(1000 as f64),
-            "1.00 - k");
+            "1.00 - K");
     }
 
     test should_allow_use_of_si_scale_explicitly() {
         assert_eq!(Formatter::new()
             .with_scales(Scales::SI())
             .format(1000 as f64),
-            "1.00 k");
+            "1.00 K");
     }
 
     test should_allow_use_of_binary_scale_explicitly() {
         assert_eq!(Formatter::new()
             .with_scales(Scales::Binary())
-            .format(1000 as f64),
-            "1.00 ki");
+            .format(1024 as f64),
+            "1.00 Ki");
     }
 
     test should_allow_use_of_binary_units_explicitly() {
         assert_eq!(Formatter::new()
             .with_scales(Scales::Binary())
             .with_units("B")
-            .format(100000 as f64),
-            "100.00 kiB");
+            .format(102400 as f64),
+            "100.00 KiB");
     }
 
-    test should_output_10_24MiB() {
+    test should_output_10_24_mib() {
         assert_eq!(Formatter::new()
             .with_scales(Scales::Binary())
             .with_units("B")
-            .format(10240000 as f64),
-            "10.24 MiB");
+            .format(1024.0 * 1024.0 as f64),
+            "1.00 MiB");
+    }
+
+    test should_output_75_11_pib() {
+        assert_eq!(Formatter::new()
+            .with_scales(Scales::Binary())
+            .with_units("B")
+            .format(84_567_942_345_572_238.0),
+            "75.11 PiB");
     }
 
     test should_allow_explicit_suffix_and_unit() {
@@ -61,7 +69,7 @@ test_suite! {
             .with_suffix("k")
             .with_units("m")
             .format(1024 as f64),
-            "1.02 km");
+            "1.02 Km");
     }
 
     test should_allow_use_of_explicit_scale() {
@@ -69,30 +77,30 @@ test_suite! {
 
         scales
             .with_base(1024)
-            .with_suffixes(vec!["","ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi", "Yi"]);
+            .with_suffixes(vec!["","Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi", "Yi"]);
 
         assert_eq!(Formatter::new()
             .with_scales(scales)
             .with_units("B")
             .format(1024 as f64),
-            "1.00 kiB");
+            "1.00 KiB");
     }
 
     test should_allow_parsing_to_f64() {
         assert_eq!(Formatter::new()
-            .parse("1.00 k"), 1000.0);
+            .parse("1.00 K"), 1000.0);
     }
 
     test should_allow_parsing_binary_values_to_f64() {
         assert_eq!(Formatter::new()
             .with_scales(Scales::Binary())
-            .parse("1.00 ki"), 1000.0);
+            .parse("1.00 Ki"), 1024.0);
     }
 
     test should_allow_parsing_binary_values_with_units_to_f64() {
         assert_eq!(Formatter::new()
             .with_scales(Scales::Binary())
             .with_units("B")
-            .parse("1.00 kiB"), 1000.0);
+            .parse("1.00 KiB"), 1024.0);
     }
 }

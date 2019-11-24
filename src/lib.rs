@@ -21,20 +21,20 @@
 //! Print some human readable strings
 //!
 //! ```rust
-//! // "1.00 k"
+//! // "1.00 K"
 //! let tmpStr = human_format::Formatter::new()
 //!     .format(1000.0);
-//! # assert_eq!(tmpStr, "1.00 k");
+//! # assert_eq!(tmpStr, "1.00 K");
 //!
 //! // "1.00 M"
 //! let tmpStr2 = human_format::Formatter::new()
 //!     .format(1000000.0);
 //! # assert_eq!(tmpStr2, "1.00 M");
 //!
-//! // "1.00 B"
+//! // "1.00 G"
 //! let tmpStr3 = human_format::Formatter::new()
 //!     .format(1000000000.0);
-//! # assert_eq!(tmpStr3, "1.00 B");
+//! # assert_eq!(tmpStr3, "1.00 G");
 //! ```
 //!
 //! If you are so inspired you can even try playing with units and customizing your `Scales`
@@ -44,7 +44,7 @@
 
 #[derive(Debug)]
 struct ScaledValue {
-    value: f32,
+    value: f64,
     suffix: String,
 }
 
@@ -58,6 +58,18 @@ pub struct Formatter {
     forced_suffix: String,
 }
 
+impl Default for Formatter {
+    fn default() -> Self {
+        Formatter {
+            decimals: 2,
+            separator: " ".to_owned(),
+            scales: Scales::SI(),
+            forced_units: "".to_owned(),
+            forced_suffix: "".to_owned(),
+        }
+    }
+}
+
 /// Provide a customized scaling scheme for your own modeling.
 #[derive(Debug)]
 pub struct Scales {
@@ -68,13 +80,7 @@ pub struct Scales {
 impl Formatter {
     /// Initializes a new `Formatter` with default values.
     pub fn new() -> Self {
-        Formatter {
-            decimals: 2,
-            separator: " ".to_owned(),
-            scales: Scales::SI(),
-            forced_units: "".to_owned(),
-            forced_suffix: "".to_owned(),
-        }
+        Default::default()
     }
 
     /// Sets the decimals value for formatting the string.
@@ -143,7 +149,13 @@ impl Formatter {
 
         let magnitude_multiplier = self.scales.get_magnitude_multipler(&suffix);
 
-        (result * magnitude_multiplier)
+        result * magnitude_multiplier
+    }
+}
+
+impl Default for Scales {
+    fn default() -> Self {
+        Scales::SI()
     }
 }
 
@@ -154,14 +166,15 @@ impl Scales {
     }
 
     /// Instantiates a new `Scales` with SI keys
+    #[allow(non_snake_case)]
     pub fn SI() -> Self {
         Scales {
             base: 1000,
             suffixes: vec![
                 "".to_owned(),
-                "k".to_owned(),
+                "K".to_owned(),
                 "M".to_owned(),
-                "B".to_owned(),
+                "G".to_owned(),
                 "T".to_owned(),
                 "P".to_owned(),
                 "E".to_owned(),
@@ -172,12 +185,13 @@ impl Scales {
     }
 
     /// Instantiates a new `Scales` with Binary keys
+    #[allow(non_snake_case)]
     pub fn Binary() -> Self {
         Scales {
-            base: 1000,
+            base: 1024,
             suffixes: vec![
                 "".to_owned(),
-                "ki".to_owned(),
+                "Ki".to_owned(),
                 "Mi".to_owned(),
                 "Gi".to_owned(),
                 "Ti".to_owned(),
@@ -210,42 +224,31 @@ impl Scales {
     }
 
     fn get_magnitude_multipler(&self, value: &str) -> f64 {
-        let ndx = 0;
-
         for ndx in 0..self.suffixes.len() {
-            println!("{}", self.suffixes[ndx]);
-
             if value == self.suffixes[ndx] {
                 return self.base.pow(ndx as u32) as f64;
             }
         }
 
-        return 0.0;
+        0.0
     }
 
     fn to_scaled_value(&self, value: f64) -> ScaledValue {
         let mut index: usize = 0;
-        let mut _value: f64 = value;
+        let base: f64 = self.base as f64;
+        let mut value = value;
 
         loop {
-            if _value < (self.base as f64) {
+            if value < base {
                 break;
             }
 
-            _value /= self.base as f64;
+            value /= base;
             index += 1;
         }
 
-        println!(
-            "\t\t{}: {} {} --- {}",
-            value,
-            index,
-            self.base.pow(index as u32),
-            value / (self.base.pow(index as u32) as f64)
-        );
-
         ScaledValue {
-            value: (value / self.base.pow((index) as u32) as f64) as f32,
+            value,
             suffix: self.suffixes[index].to_owned(),
         }
     }
