@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
--   Removed unnecessary logging - PR by @jaysonsantos
+-   Removed unnecessary logging - [PR#9](https://github.com/BobGneu/human-format-rs/pull/9) by [@jaysonsantos](https://github.com/jaysonsantos)
 -   Corrected binary base to 1024
 
 ## [1.0.2] - 2018-02-01
@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 Initial Release
 
 [unreleased]: https://github.com/BobGneu/human-format-rs/compare/master...develop
+[1.0.3]: https://github.com/BobGneu/human-format-rs/compare/1.0.2...1.0.3
 [1.0.2]: https://github.com/BobGneu/human-format-rs/compare/1.0.1...1.0.2
 [1.0.1]: https://github.com/BobGneu/human-format-rs/compare/1.0.0...1.0.1
 [1.0.0]: https://github.com/BobGneu/human-format-rs/tree/1.0.0
