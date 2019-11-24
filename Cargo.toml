@@ -8,7 +8,6 @@ homepage = "https://github.com/BobGneu/human-format-rs"
 repository = "https://github.com/BobGneu/human-format-rs"
 documentation = "https://docs.rs/human_format"
 readme = "README.md"
-license-file = "LICENSE"
 keywords = ["numbers", "formatting", "filesize", "human", "magnitude"]
 categories = ["value-formatting", "no-std"]
 
