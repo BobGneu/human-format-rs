@@ -210,8 +210,6 @@ impl Scales {
     }
 
     fn get_magnitude_multipler(&self, value: &str) -> f64 {
-        let ndx = 0;
-
         for ndx in 0..self.suffixes.len() {
             if value == self.suffixes[ndx] {
                 return self.base.pow(ndx as u32) as f64;
