@@ -174,10 +174,10 @@ impl Scales {
     /// Instantiates a new `Scales` with Binary keys
     pub fn Binary() -> Self {
         Scales {
-            base: 1000,
+            base: 1024,
             suffixes: vec![
                 "".to_owned(),
-                "ki".to_owned(),
+                "Ki".to_owned(),
                 "Mi".to_owned(),
                 "Gi".to_owned(),
                 "Ti".to_owned(),
@@ -210,11 +210,7 @@ impl Scales {
     }
 
     fn get_magnitude_multipler(&self, value: &str) -> f64 {
-        let ndx = 0;
-
         for ndx in 0..self.suffixes.len() {
-            println!("{}", self.suffixes[ndx]);
-
             if value == self.suffixes[ndx] {
                 return self.base.pow(ndx as u32) as f64;
             }
@@ -235,14 +231,6 @@ impl Scales {
             _value /= self.base as f64;
             index += 1;
         }
-
-        println!(
-            "\t\t{}: {} {} --- {}",
-            value,
-            index,
-            self.base.pow(index as u32),
-            value / (self.base.pow(index as u32) as f64)
-        );
 
         ScaledValue {
             value: (value / self.base.pow((index) as u32) as f64) as f32,
