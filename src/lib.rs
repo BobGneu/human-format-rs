@@ -174,10 +174,10 @@ impl Scales {
     /// Instantiates a new `Scales` with Binary keys
     pub fn Binary() -> Self {
         Scales {
-            base: 1000,
+            base: 1024,
             suffixes: vec![
                 "".to_owned(),
-                "ki".to_owned(),
+                "Ki".to_owned(),
                 "Mi".to_owned(),
                 "Gi".to_owned(),
                 "Ti".to_owned(),
