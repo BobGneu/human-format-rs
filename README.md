@@ -20,7 +20,7 @@ The primary purpose for this crate is to format numbers in a customizable fashio
 
 ```toml
 [dependencies]
-human_format = "0.2"
+human_format = "1.0"
 ```
 
 2. Add the crate reference at your crate root
