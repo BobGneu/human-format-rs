@@ -172,7 +172,7 @@ impl Scales {
             base: 1000,
             suffixes: vec![
                 "".to_owned(),
-                "k".to_owned(),
+                "K".to_owned(),
                 "M".to_owned(),
                 "G".to_owned(),
                 "T".to_owned(),
