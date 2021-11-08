@@ -31,10 +31,10 @@
 //!     .format(1000000.0);
 //! # assert_eq!(tmpStr2, "1.00 M");
 //!
-//! // "1.00 B"
+//! // "1.00 G"
 //! let tmpStr3 = human_format::Formatter::new()
 //!     .format(1000000000.0);
-//! # assert_eq!(tmpStr3, "1.00 B");
+//! # assert_eq!(tmpStr3, "1.00 G");
 //! ```
 //!
 //! If you are so inspired you can even try playing with units and customizing your `Scales`
@@ -44,7 +44,7 @@
 
 #[derive(Debug)]
 struct ScaledValue {
-    value: f32,
+    value: f64,
     suffix: String,
 }
 
@@ -58,6 +58,18 @@ pub struct Formatter {
     forced_suffix: String,
 }
 
+impl Default for Formatter {
+    fn default() -> Self {
+        Formatter {
+            decimals: 2,
+            separator: " ".to_owned(),
+            scales: Scales::SI(),
+            forced_units: "".to_owned(),
+            forced_suffix: "".to_owned(),
+        }
+    }
+}
+
 /// Provide a customized scaling scheme for your own modeling.
 #[derive(Debug)]
 pub struct Scales {
@@ -68,13 +80,7 @@ pub struct Scales {
 impl Formatter {
     /// Initializes a new `Formatter` with default values.
     pub fn new() -> Self {
-        Formatter {
-            decimals: 2,
-            separator: " ".to_owned(),
-            scales: Scales::SI(),
-            forced_units: "".to_owned(),
-            forced_suffix: "".to_owned(),
-        }
+        Default::default()
     }
 
     /// Sets the decimals value for formatting the string.
@@ -143,7 +149,13 @@ impl Formatter {
 
         let magnitude_multiplier = self.scales.get_magnitude_multipler(&suffix);
 
-        (result * magnitude_multiplier)
+        result * magnitude_multiplier
+    }
+}
+
+impl Default for Scales {
+    fn default() -> Self {
+        Scales::SI()
     }
 }
 
@@ -154,6 +166,7 @@ impl Scales {
     }
 
     /// Instantiates a new `Scales` with SI keys
+    #[allow(non_snake_case)]
     pub fn SI() -> Self {
         Scales {
             base: 1000,
@@ -161,7 +174,7 @@ impl Scales {
                 "".to_owned(),
                 "k".to_owned(),
                 "M".to_owned(),
-                "B".to_owned(),
+                "G".to_owned(),
                 "T".to_owned(),
                 "P".to_owned(),
                 "E".to_owned(),
@@ -172,6 +185,7 @@ impl Scales {
     }
 
     /// Instantiates a new `Scales` with Binary keys
+    #[allow(non_snake_case)]
     pub fn Binary() -> Self {
         Scales {
             base: 1024,
@@ -216,7 +230,7 @@ impl Scales {
             }
         }
 
-        return 0.0;
+        0.0
     }
 
     fn to_scaled_value(&self, value: f64) -> ScaledValue {
@@ -233,7 +247,7 @@ impl Scales {
         }
 
         ScaledValue {
-            value: (value / self.base.pow((index) as u32) as f64) as f32,
+            value: value / self.base.pow((index) as u32) as f64,
             suffix: self.suffixes[index].to_owned(),
         }
     }
