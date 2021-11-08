@@ -21,10 +21,10 @@
 //! Print some human readable strings
 //!
 //! ```rust
-//! // "1.00 k"
+//! // "1.00 K"
 //! let tmpStr = human_format::Formatter::new()
 //!     .format(1000.0);
-//! # assert_eq!(tmpStr, "1.00 k");
+//! # assert_eq!(tmpStr, "1.00 K");
 //!
 //! // "1.00 M"
 //! let tmpStr2 = human_format::Formatter::new()
@@ -235,19 +235,20 @@ impl Scales {
 
     fn to_scaled_value(&self, value: f64) -> ScaledValue {
         let mut index: usize = 0;
-        let mut _value: f64 = value;
+        let base: f64 = self.base as f64;
+        let mut value = value;
 
         loop {
-            if _value < (self.base as f64) {
+            if value < base {
                 break;
             }
 
-            _value /= self.base as f64;
+            value /= base;
             index += 1;
         }
 
         ScaledValue {
-            value: value / self.base.pow((index) as u32) as f64,
+            value,
             suffix: self.suffixes[index].to_owned(),
         }
     }
