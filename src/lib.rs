@@ -151,6 +151,37 @@ impl Formatter {
 
         result * magnitude_multiplier
     }
+
+    /// Attempt to parse a string back into a float value.
+    pub fn try_parse(&self, value: &str) -> Result<f64, String> {
+        let value = value.to_string();
+        // Remove suffix if present
+        let value = value.trim_end_matches(&self.forced_units).to_string();
+
+        // Find Suffix
+        let mut number = String::new();
+        for c in value.chars() {
+            if c.is_digit(10) || c == '.' {
+                number.push(c);
+            } else {
+                break;
+            }
+        }
+        let suffix = value
+            .trim_start_matches(&number)
+            .trim_start_matches(&self.separator)
+            .to_string();
+
+        let result = number.parse::<f64>().map_err(|e| e.to_string())?;
+
+        let magnitude_multiplier = self.scales.get_magnitude_multipler(&suffix);
+
+        if magnitude_multiplier > 0.0 {
+            Ok(result * magnitude_multiplier)
+        } else {
+            Err(format!("Unknown suffix: {}", suffix))
+        }
+    }
 }
 
 impl Default for Scales {
@@ -226,7 +257,7 @@ impl Scales {
     fn get_magnitude_multipler(&self, value: &str) -> f64 {
         for ndx in 0..self.suffixes.len() {
             if value == self.suffixes[ndx] {
-                return self.base.pow(ndx as u32) as f64;
+                return (self.base as f64).powi(ndx as i32);
             }
         }
 
