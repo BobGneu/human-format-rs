@@ -51,10 +51,10 @@ test_script:
   - cargo test --verbose
   - cargo build --release --verbose --all
 
-notifications:
-  - provider: Webhook
-    url: https://webhooks.gitter.im/e/32d2a5e895aa632a5754
-    method: GET
+# notifications:
+#  - provider: Webhook
+#    url: https://webhooks.gitter.im/e/32d2a5e895aa632a5754
+#    method: GET
     
 cache:
   - target
