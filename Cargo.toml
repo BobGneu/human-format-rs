@@ -8,7 +8,6 @@ homepage = "https://github.com/BobGneu/human-format-rs"
 repository = "https://github.com/BobGneu/human-format-rs"
 documentation = "https://docs.rs/human_format"
 readme = "README.md"
-license-file = "LICENSE"
 keywords = ["numbers", "formatting", "filesize", "human", "magnitude"]
 categories = ["value-formatting", "no-std"]
 
@@ -19,7 +18,7 @@ path = "src/lib.rs"
 [badges]
 travis-ci = { repository = "BobGneu/human-format-rs" }
 appveyor =  { repository = "BobGneu/human-format-rs" }
-maintenace = { status = "actively-developed" }
+maintenance = { status = "passively-maintained" }
 
 [dev-dependencies]
 galvanic-test = "0.1.3"
