@@ -16,8 +16,6 @@ name = "human_format"
 path = "src/lib.rs"
 
 [badges]
-travis-ci = { repository = "BobGneu/human-format-rs" }
-appveyor =  { repository = "BobGneu/human-format-rs" }
 maintenance = { status = "passively-maintained" }
 
 [dev-dependencies]
