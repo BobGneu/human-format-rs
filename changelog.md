@@ -7,25 +7,33 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+
+- Format check included in build
+
+### Removed
+
+- removed Travis & Appveyor
+
 ## [1.0.3] - 2019-11-23
 
 ### Fixed
 
--   Removed unnecessary logging - [PR#9](https://github.com/BobGneu/human-format-rs/pull/9) by [@jaysonsantos](https://github.com/jaysonsantos)
--   Corrected binary base to 1024
+- Removed unnecessary logging - [PR#9](https://github.com/BobGneu/human-format-rs/pull/9) by [@jaysonsantos](https://github.com/jaysonsantos)
+- Corrected binary base to 1024
 
 ## [1.0.2] - 2018-02-01
 
 ### Fixed
 
--   Corrected issue with API, expecting owned strings when the common occurance will be references.
+- Corrected issue with API, expecting owned strings when the common occurance will be references.
 
 ## [1.0.1] - 2018-01-28
 
 ### Added
 
--   Updated Documentation to improve utility of [docs.rs](https://docs.rs/crate/human_format/)
--   Added fmt to build scripts
+- Updated Documentation to improve utility of [docs.rs](https://docs.rs/crate/human_format/)
+- Added fmt to build scripts
 
 ## [1.0.0] - 2018-01-28
 
