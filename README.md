@@ -21,13 +21,7 @@ The primary purpose for this crate is to format numbers in a customizable fashio
 human_format = "1.0"
 ```
 
-2. Add the crate reference at your crate root
-
-```rust
-extern crate human_format;
-```
-
-3. Print some human readable strings
+2. Print some human readable strings
 
 ## Examples
 
