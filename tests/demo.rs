@@ -64,6 +64,13 @@ test_suite! {
             "75.11 PiB");
     }
 
+    test should_output_1_00_gbps() {
+        assert_eq!(Formatter::new()
+            .with_units("B/s")
+            .format(1e9),
+            "1.00 GB/s");
+    }
+
     test should_allow_explicit_suffix_and_unit() {
         assert_eq!(Formatter::new()
             .with_suffix("k")
