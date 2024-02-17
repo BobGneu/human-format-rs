@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.1.0] - 2024-02-16
+
 ### Changed
 
 - Format check included in build
@@ -41,6 +43,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 Initial Release
 
 [unreleased]: https://github.com/BobGneu/human-format-rs/compare/master...develop
+[1.1.0]: https://github.com/BobGneu/human-format-rs/compare/1.0.3...1.1.0
 [1.0.3]: https://github.com/BobGneu/human-format-rs/compare/1.0.2...1.0.3
 [1.0.2]: https://github.com/BobGneu/human-format-rs/compare/1.0.1...1.0.2
 [1.0.1]: https://github.com/BobGneu/human-format-rs/compare/1.0.0...1.0.1
