@@ -154,8 +154,6 @@ impl Formatter {
 
     /// Attempt to parse a string back into a float value.
     pub fn try_parse(&self, value: &str) -> Result<f64, String> {
-        let value = value.to_string();
-
         // Remove suffix if present
         let value = value.trim_end_matches(&self.forced_units).to_string();
 
