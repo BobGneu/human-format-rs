@@ -64,6 +64,13 @@ test_suite! {
             "75.11 PiB");
     }
 
+    test should_output_1_00_gbps() {
+        assert_eq!(Formatter::new()
+            .with_units("B/s")
+            .format(1e9),
+            "1.00 GB/s");
+    }
+
     test should_allow_explicit_suffix_and_unit() {
         assert_eq!(Formatter::new()
             .with_suffix("k")
@@ -114,6 +121,16 @@ test_suite! {
             .with_scales(Scales::Binary())
             .with_units("B")
             .try_parse("1.00 KiB"), Ok(1024.0));
+    }
+
+    test should_surface_errors() {
+        let result = Formatter::new()
+            .with_scales(Scales::Binary())
+            .with_units("B")
+            .try_parse("1.00 DN");
+
+        assert!(result.is_err());
+        assert_eq!(result.unwrap_err(), "Unknown suffix: DN, valid suffixes are: Ki, Mi, Gi, Ti, Pi, Ei, Zi, Yi");
     }
 
     test try_parse_explicit_suffix_and_unit() {
