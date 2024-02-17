@@ -123,6 +123,16 @@ test_suite! {
             .try_parse("1.00 KiB"), Ok(1024.0));
     }
 
+    test should_allow_try_parsing_binary_values_with_units_to_f642() {
+        let result = Formatter::new()
+            .with_scales(Scales::Binary())
+            .with_units("B")
+            .try_parse("1.00 DN");
+
+        assert!(result.is_err());
+        assert_eq!(result.unwrap_err(), "Unknown suffix: DN, valid suffixes are: Ki, Mi, Gi, Ti, Pi, Ei, Zi, Yi");
+    }
+
     test try_parse_explicit_suffix_and_unit() {
         assert_eq!(Formatter::new()
                    .with_units("m")
