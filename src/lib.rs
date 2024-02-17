@@ -140,14 +140,14 @@ impl Formatter {
     pub fn parse(&self, value: &str) -> f64 {
         let v: Vec<&str> = value.split(&self.separator).collect();
 
-        let result = v.get(0).unwrap().parse::<f64>().unwrap();
+        let result = v.first().unwrap().parse::<f64>().unwrap();
 
         let mut suffix = v.get(1).unwrap().to_string();
         let new_len = suffix.len() - self.forced_units.len();
 
         suffix.truncate(new_len);
 
-        let magnitude_multiplier = self.scales.get_magnitude_multipler(&suffix);
+        let magnitude_multiplier = self.scales.get_magnitude_multiplier(&suffix);
 
         result * magnitude_multiplier
     }
@@ -174,7 +174,7 @@ impl Formatter {
 
         let result = number.parse::<f64>().map_err(|e| e.to_string())?;
 
-        let magnitude_multiplier = self.scales.get_magnitude_multipler(&suffix);
+        let magnitude_multiplier = self.scales.try_get_magnitude_multiplier(&suffix)?;
 
         if magnitude_multiplier > 0.0 {
             Ok(result * magnitude_multiplier)
@@ -254,7 +254,31 @@ impl Scales {
         self
     }
 
-    fn get_magnitude_multipler(&self, value: &str) -> f64 {
+    fn try_get_magnitude_multiplier(&self, value: &str) -> Result<f64, String> {
+        self.suffixes
+            .iter()
+            .enumerate()
+            .find_map(|(idx, x)| {
+                if value == x {
+                    Some((self.base as f64).powi(idx as i32))
+                } else {
+                    None
+                }
+            })
+            .ok_or_else(|| {
+                format!(
+                    "Unknown suffix: {value}, valid suffixes are: {}",
+                    self.suffixes
+                        .iter()
+                        .filter(|x| !x.trim().is_empty())
+                        .map(String::to_string)
+                        .collect::<Vec<_>>()
+                        .join(", ")
+                )
+            })
+    }
+
+    fn get_magnitude_multiplier(&self, value: &str) -> f64 {
         for ndx in 0..self.suffixes.len() {
             if value == self.suffixes[ndx] {
                 return (self.base as f64).powi(ndx as i32);
