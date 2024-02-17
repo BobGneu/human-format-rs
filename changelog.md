@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 - Format check included in build
+- Improve error handling in try_parse with better ergonomics - [PR#19]https://github.com/BobGneu/human-format-rs/pull/9 by [@jgrund](https://github.com/jgrund)
 
 ### Removed
 
