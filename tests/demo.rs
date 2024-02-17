@@ -123,7 +123,7 @@ test_suite! {
             .try_parse("1.00 KiB"), Ok(1024.0));
     }
 
-    test should_allow_try_parsing_binary_values_with_units_to_f642() {
+    test should_surface_errors() {
         let result = Formatter::new()
             .with_scales(Scales::Binary())
             .with_units("B")
