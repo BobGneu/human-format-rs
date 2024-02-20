@@ -7,6 +7,7 @@ on:
     branches: [develop, master]
   schedule:
     - cron: 0 0 * * 0
+  workflow_dispatch:
 
 env:
   CARGO_TERM_COLOR: always
@@ -25,11 +26,11 @@ jobs:
       - name: Format
         run: cargo fmt --check
 
+      - name: Run linter
+        run: cargo clippy --verbose
+
       - name: Run tests
         run: cargo test --verbose
-
-      - name: Run checks
-        run: cargo check --verbose
 
       - name: Build
         run: cargo build --verbose
