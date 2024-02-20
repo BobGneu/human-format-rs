@@ -4,9 +4,9 @@
 
 Rust Port of human-format from node, formatting numbers for us, while the machines are still at bay.
 
-| Master                                                                                                                                                                            |                                                                                       Develop                                                                                       |
-| :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| [![Master](https://github.com/BobGneu/human-format-rs/actions/workflows/rust.yml/badge.svg?branch=master)](https://github.com/BobGneu/human-format-rs/actions/workflows/rust.yml) | [![Develop](https://github.com/BobGneu/human-format-rs/actions/workflows/rust.yml/badge.svg?branch=develop)](https://github.com/BobGneu/human-format-rs/actions/workflows/rust.yml) |
+| Main                                                                                                                                                                          |                                                                                       Develop                                                                                       |
+| :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| [![Main](https://github.com/BobGneu/human-format-rs/actions/workflows/rust.yml/badge.svg?branch=main)](https://github.com/BobGneu/human-format-rs/actions/workflows/rust.yml) | [![Develop](https://github.com/BobGneu/human-format-rs/actions/workflows/rust.yml/badge.svg?branch=develop)](https://github.com/BobGneu/human-format-rs/actions/workflows/rust.yml) |
 
 ## What is human_format?
 
@@ -72,4 +72,4 @@ Formatter::new()
     .format(1000 as f64);
 ```
 
-For more examples please consult [tests/demo.rs](https://github.com/BobGneu/human-format-rs/blob/master/tests/demo.rs)
+For more examples please consult [tests/demo.rs](https://github.com/BobGneu/human-format-rs/blob/develop/tests/demo.rs)
