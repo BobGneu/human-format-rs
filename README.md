@@ -14,14 +14,8 @@ The primary purpose for this crate is to format numbers in a customizable fashio
 
 ## Usage
 
-1. Add this package as a dependency
-
-```toml
-[dependencies]
-human_format = "1.0"
-```
-
-2. Print some human readable strings
+1. Add this package as a dependency - `cargo add human_format`
+1. Print some human readable strings
 
 ## Examples
 
