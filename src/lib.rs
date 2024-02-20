@@ -160,7 +160,7 @@ impl Formatter {
         // Find Suffix
         let mut number = String::new();
         for c in value.chars() {
-            if c.is_digit(10) || c == '.' {
+            if c.is_ascii_digit() || c == '.' {
                 number.push(c);
             } else {
                 break;
