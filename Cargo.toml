@@ -17,6 +17,3 @@ path = "src/lib.rs"
 
 [badges]
 maintenance = { status = "passively-maintained" }
-
-[dev-dependencies]
-galvanic-test = "0.1.3"
