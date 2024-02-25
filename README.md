@@ -1,4 +1,4 @@
-# human-format-rs
+# human_format
 
 [![Crates.io](https://img.shields.io/crates/v/human_format.svg)](https://crates.io/crates/human_format) [![Documentation](https://img.shields.io/badge/docs-rs-red.svg)](https://docs.rs/human_format)
 
