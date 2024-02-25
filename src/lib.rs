@@ -7,15 +7,8 @@
 //!
 //! Add the library to your dependencies listing
 //!
-//! ```toml
-//! [dependencies]
-//! human_format = "0.2"
-//! ```
-//!
-//! Add the crate reference at your crate root
-//!
-//! ```rust
-//! extern crate human_format;
+//! ```bash
+//! $ cargo add human_format
 //! ```
 //!
 //! Print some human readable strings
