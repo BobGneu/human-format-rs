@@ -13,7 +13,37 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
+  lint:
+    name: Lint & Formatting Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Format
+        run: cargo fmt --check
+
+      - name: Linter
+        run: cargo clippy --verbose
+
+      - name: Checker
+        run: cargo check --verbose
+
+  test:
+    name: Test
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run tests
+        run: cargo test --verbose
+
   build:
+    name: Build
+    needs: test
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
@@ -23,17 +53,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Format
-        run: cargo fmt --check
-
-      - name: Run linter
-        run: cargo clippy --verbose
-
-      - name: Run tests
-        run: cargo test --verbose
-
       - name: Build
         run: cargo build --verbose
+
+  docs:
+    name: Documentation
+    needs: [lint, test, build]
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Generate Docs
+        run: cargo doc --examples --verbose
 
   sonarcloud:
     needs: [build]
