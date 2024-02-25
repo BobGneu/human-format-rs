@@ -33,6 +33,9 @@ jobs:
           toolchain: ${{ matrix.toolchain }}
 
       - name: Format
+        run: rustup component add rustfmt          
+
+      - name: Format
         run: cargo fmt --check
 
       - name: Linter
