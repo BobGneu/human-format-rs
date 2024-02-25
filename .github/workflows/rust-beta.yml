@@ -32,8 +32,8 @@ jobs:
         with:
           toolchain: ${{ matrix.toolchain }}
 
-      - name: Format
-        run: rustup component add rustfmt          
+      - name: Install cargo components
+        run: rustup component add rustfmt clippy
 
       - name: Format
         run: cargo fmt --check
