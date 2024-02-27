@@ -1,0 +1,67 @@
+name: Rust - Beta/Nightly Checks
+
+on:
+  push:
+    branches: [develop, master]
+  pull_request:
+    branches: [develop, master]
+  schedule:
+    - cron: 0 0 * * 0
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  lint:
+    name: Lint & Formatting Check
+
+    strategy:
+      matrix:
+        toolchain: ["beta", "nightly"]
+
+    runs-on: ubuntu-latest
+
+    continue-on-error: true
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: ${{ matrix.toolchain }}
+
+      - name: Install cargo components
+        run: rustup component add rustfmt clippy
+
+      - name: Format
+        run: cargo fmt --check
+
+      - name: Linter
+        run: cargo clippy -- -Dwarnings --verbose 
+
+      - name: Checker
+        run: cargo check --verbose
+
+  test:
+    name: Test
+
+    strategy:
+      matrix:
+        toolchain: ["beta", "nightly"]
+
+    runs-on: ubuntu-latest
+
+    continue-on-error: true
+
+    steps:
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: ${{ matrix.toolchain }}
+
+      - uses: actions/checkout@v4
+
+      - name: Run tests
+        run: cargo test --verbose

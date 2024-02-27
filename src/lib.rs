@@ -56,7 +56,7 @@ impl Default for Formatter {
         Formatter {
             decimals: 2,
             separator: " ".to_owned(),
-            scales: Scales::SI(),
+            scales: Scales::new(),
             forced_units: "".to_owned(),
             forced_suffix: "".to_owned(),
         }
@@ -181,7 +181,7 @@ impl Default for Scales {
 impl Scales {
     /// Instantiates a new `Scales` with SI keys
     pub fn new() -> Self {
-        Scales::SI()
+        Default::default()
     }
 
     /// Instantiates a new `Scales` with SI keys
