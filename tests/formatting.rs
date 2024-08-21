@@ -7,16 +7,16 @@ mod formatting {
     #[test]
     fn should_allow_use_of_si_scale_implicitly() {
         assert_eq!(
-            Formatter::new().with_suffix("K").format(1000 as f64),
-            "1.00 K"
+            Formatter::new().with_suffix("k").format(1000 as f64),
+            "1.00 k"
         );
     }
 
     #[test]
     fn should_handle_negative_values() {
         assert_eq!(
-            Formatter::new().with_suffix("K").format(-1000 as f64),
-            "-1.00 K"
+            Formatter::new().with_suffix("k").format(-1000 as f64),
+            "-1.00 k"
         );
     }
 

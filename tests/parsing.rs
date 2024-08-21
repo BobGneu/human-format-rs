@@ -13,7 +13,7 @@ mod parsing {
     #[test]
     fn should_parse_11248924551_k_as_1_1248924551e13() {
         let formatter = Formatter::new();
-        assert_eq!(formatter.parse("11248924551 K"), 1.1248924551e13);
+        assert_eq!(formatter.parse("11248924551 k"), 1.1248924551e13);
     }
 
     #[test]
@@ -21,6 +21,6 @@ mod parsing {
         let mut formatter = Formatter::new();
         formatter.with_decimals(3);
 
-        assert_eq!(formatter.parse("1494 K"), 1494000.0);
+        assert_eq!(formatter.parse("1494 k"), 1494000.0);
     }
 }

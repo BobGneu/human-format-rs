@@ -17,7 +17,7 @@
 //! // "1.00 K"
 //! let tmpStr = human_format::Formatter::new()
 //!     .format(1000.0);
-//! # assert_eq!(tmpStr, "1.00 K");
+//! # assert_eq!(tmpStr, "1.00 k");
 //!
 //! // "1.00 M"
 //! let tmpStr2 = human_format::Formatter::new()
@@ -191,7 +191,7 @@ impl Scales {
             base: 1000,
             suffixes: vec![
                 "".to_owned(),
-                "K".to_owned(),
+                "k".to_owned(),
                 "M".to_owned(),
                 "G".to_owned(),
                 "T".to_owned(),
@@ -210,7 +210,7 @@ impl Scales {
             base: 1024,
             suffixes: vec![
                 "".to_owned(),
-                "Ki".to_owned(),
+                "ki".to_owned(),
                 "Mi".to_owned(),
                 "Gi".to_owned(),
                 "Ti".to_owned(),

@@ -6,14 +6,14 @@ mod demo_examples {
 
     #[test]
     fn should_allow_use_of_si_scale_implicitly() {
-        assert_eq!(Formatter::new().format(1000 as f64), "1.00 K");
+        assert_eq!(Formatter::new().format(1000 as f64), "1.00 k");
     }
 
     #[test]
     fn should_allow_explicit_decimals() {
         assert_eq!(
             Formatter::new().with_decimals(1).format(1000 as f64),
-            "1.0 K"
+            "1.0 k"
         );
     }
 
@@ -21,7 +21,7 @@ mod demo_examples {
     fn should_allow_explicit_separator() {
         assert_eq!(
             Formatter::new().with_separator(" - ").format(1000 as f64),
-            "1.00 - K"
+            "1.00 - k"
         );
     }
 
@@ -31,7 +31,7 @@ mod demo_examples {
             Formatter::new()
                 .with_scales(Scales::SI())
                 .format(1000 as f64),
-            "1.00 K"
+            "1.00 k"
         );
     }
 
@@ -41,7 +41,7 @@ mod demo_examples {
             Formatter::new()
                 .with_scales(Scales::Binary())
                 .format(1024 as f64),
-            "1.00 Ki"
+            "1.00 ki"
         );
     }
 
@@ -52,7 +52,7 @@ mod demo_examples {
                 .with_scales(Scales::Binary())
                 .with_units("B")
                 .format(102400 as f64),
-            "100.00 KiB"
+            "100.00 kiB"
         );
     }
 
@@ -90,7 +90,7 @@ mod demo_examples {
                 .with_suffix("k")
                 .with_units("m")
                 .format(1024 as f64),
-            "1.02 Km"
+            "1.02 km"
         );
     }
 
@@ -113,7 +113,7 @@ mod demo_examples {
 
     #[test]
     fn should_allow_parsing_to_f64() {
-        assert_eq!(Formatter::new().parse("1.00 K"), 1000.0);
+        assert_eq!(Formatter::new().parse("1.00 k"), 1000.0);
     }
 
     #[test]
@@ -126,7 +126,7 @@ mod demo_examples {
         assert_eq!(
             Formatter::new()
                 .with_scales(Scales::Binary())
-                .parse("1.00 Ki"),
+                .parse("1.00 ki"),
             1024.0
         );
     }
@@ -137,7 +137,7 @@ mod demo_examples {
             Formatter::new()
                 .with_scales(Scales::Binary())
                 .with_units("B")
-                .parse("1.00 KiB"),
+                .parse("1.00 kiB"),
             1024.0
         );
     }
@@ -148,7 +148,7 @@ mod demo_examples {
             Formatter::new()
                 .with_scales(Scales::Binary())
                 .with_units("B")
-                .try_parse("1.00 KiB"),
+                .try_parse("1.00 kiB"),
             Ok(1024.0)
         );
     }
@@ -163,7 +163,7 @@ mod demo_examples {
         assert!(result.is_err());
         assert_eq!(
             result.unwrap_err(),
-            "Unknown suffix: DN, valid suffixes are: Ki, Mi, Gi, Ti, Pi, Ei, Zi, Yi"
+            "Unknown suffix: DN, valid suffixes are: ki, Mi, Gi, Ti, Pi, Ei, Zi, Yi"
         );
     }
 

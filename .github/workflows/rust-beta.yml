@@ -28,7 +28,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ matrix.toolchain }}
 
@@ -39,7 +39,7 @@ jobs:
         run: cargo fmt --check
 
       - name: Linter
-        run: cargo clippy -- -Dwarnings --verbose 
+        run: cargo clippy -- -Dwarnings --verbose
 
       - name: Checker
         run: cargo check --verbose
@@ -56,12 +56,12 @@ jobs:
     continue-on-error: true
 
     steps:
+      - uses: actions/checkout@v4
+
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ matrix.toolchain }}
-
-      - uses: actions/checkout@v4
 
       - name: Run tests
         run: cargo test --verbose

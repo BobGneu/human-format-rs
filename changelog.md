@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - A few tweaks to our build flow to run clippy, and make sure to gate building based on prior dependent actions
 - Renamed `master` branch to `main`
+- lower casing si suffixes
 
 ### Removed
 
