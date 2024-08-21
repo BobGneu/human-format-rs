@@ -10,6 +10,8 @@ name = "human_format"
 readme = "README.md"
 repository = "https://github.com/BobGneu/human-format-rs"
 version = "1.1.0"
+edition = '2021'
+resolver = "2"
 
 [lib]
 name = "human_format"

@@ -31,8 +31,8 @@ jobs:
       - name: Checker
         run: cargo check --verbose
 
-      # - name: Linter
-      #   run: cargo clippy -- -Dwarnings --verbose
+      - name: Linter
+        run: cargo clippy -- -Dwarnings
 
   test:
     name: Test
@@ -88,7 +88,7 @@ jobs:
     runs-on: ubuntu-latest
 
     needs: [build]
-    env: 
+    env:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
     steps:

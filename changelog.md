@@ -14,8 +14,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 - A few tweaks to our build flow to run clippy, and make sure to gate building based on prior dependent actions
+  - removed verbose flag as it does not appear to be necessary any longer
 - Renamed `master` branch to `main`
-- lower casing si suffixes
+- lower casing si suffixes - [PR#27](https://github.com/BobGneu/human-format-rs/pull/27) by [jdrouet](https://github.com/jdrouet)
 
 ### Removed
 
@@ -26,7 +27,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 - Format check included in build
-- Improve error handling in try_parse with better ergonomics - [PR#19]https://github.com/BobGneu/human-format-rs/pull/9 by [@jgrund](https://github.com/jgrund)
+- Improve error handling in try_parse with better ergonomics - [PR#19](https://github.com/BobGneu/human-format-rs/pull/19) by [@jgrund](https://github.com/jgrund)
 
 ### Removed
 
