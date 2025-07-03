@@ -17,13 +17,13 @@ mod parsing {
     }
 
     #[test]
-    fn should_parse_55_86_q_as_5_586_e_31() {
+    fn should_parse_55_86_q_as_5_586_e31() {
         let formatter = Formatter::new();
         assert_eq!(formatter.parse("55.86 Q"), 5.586e31);
     }
 
     #[test]
-    fn should() {
+    fn should_parse_558559_63_q_as_5_5855963e35() {
         let formatter = Formatter::new();
         assert_eq!(formatter.parse("558559.63 Q"), 5.5855963e35);
     }
