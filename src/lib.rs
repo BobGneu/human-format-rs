@@ -199,6 +199,8 @@ impl Scales {
                 "E".to_owned(),
                 "Z".to_owned(),
                 "Y".to_owned(),
+                "R".to_owned(),
+                "Q".to_owned(),
             ],
         }
     }
@@ -218,6 +220,8 @@ impl Scales {
                 "Ei".to_owned(),
                 "Zi".to_owned(),
                 "Yi".to_owned(),
+                "Ri".to_owned(),
+                "Qi".to_owned(),
             ],
         }
     }
@@ -282,7 +286,7 @@ impl Scales {
         let mut value = value;
 
         loop {
-            if value < base {
+            if value < base || index == self.suffixes.len() - 1 {
                 break;
             }
 
