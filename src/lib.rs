@@ -247,7 +247,8 @@ impl Formatter {
     /// Parse a string and optionally clamp unknown suffixes to the largest suffix multiplier.
     ///
     /// If `clamp` is `false`, this behaves like `try_parse` and returns an error on unknown suffixes.
-    /// If `clamp` is `true`, unknown suffixes will be interpreted as the largest available suffix.  ///
+    /// If `clamp` is `true`, unknown suffixes will be interpreted as the largest available suffix.
+    ///
     /// Examples:
     ///
     /// ```rust

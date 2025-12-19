@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 -   `ParseError` enum with variants for `EmptyInput`, `InvalidNumber`, and `UnknownSuffix`
 -   `parse_or_clamp` convenience method to optionally clamp unknown suffixes to the largest multiplier (now respects `explicit_map` when present)
 -   Doctests and README snippets demonstrating `try_parse`, binary scales, units and negative numbers
--   Support for the newest SI prefixes: `R`/`Q` (ronna/quetta) and `r`/`q` (ronto/que cto)
+-   Support for the newest SI prefixes: `R`/`Q` (ronna/quetta) and `r`/`q` (ronto/quecto)
 -   Optional micro sign formatting and parsing: accept `µ` and output `µ` when enabled via `Formatter::with_micro_sign(true)`
 -   Forced suffix formatting: `Formatter::with_suffix("M")` will scale output to the requested suffix when possible (e.g., `100000 -> 0.10 M`)
 -   New `Scales::Time()` with explicit time unit multipliers (`ns`, `us`, `ms`, `s`, `m`, `h`, `d`, `w`, `mo`, `qtr`, `y`, `dec`, `c`, `kyr`, `Myr`, `Gyr`, and aliases)
@@ -55,7 +55,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
--   Corrected issue with API, expecting owned strings when the common occurance will be references.
+-   Corrected issue with API, expecting owned strings when the common occurrence will be references.
 
 ## [1.0.1] - 2018-01-28
 
