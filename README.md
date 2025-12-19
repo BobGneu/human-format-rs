@@ -95,6 +95,15 @@ assert!(Formatter::new().parse_or_clamp("1.0 DN", false).is_err());
 
 // parse_or_clamp: clamp unknown suffix to largest multiplier
 assert!(Formatter::new().parse_or_clamp("1.0 DN", true).is_ok());
+
+// Newest SI prefixes
+// R = ronna (10^27), Q = quetta (10^30)
+assert_eq!(Formatter::new().try_parse("1.0 R").unwrap(), 1e27);
+assert_eq!(Formatter::new().try_parse("1.0 Q").unwrap(), 1e30);
+
+// r = ronto (10^-27), q = quecto (10^-30)
+assert_eq!(Formatter::new().try_parse("1.0 r").unwrap(), 1e-27);
+assert_eq!(Formatter::new().try_parse("1.0 q").unwrap(), 1e-30);
 ```
 
 For more examples please consult [tests/demo.rs](https://github.com/BobGneu/human-format-rs/blob/develop/tests/demo.rs)

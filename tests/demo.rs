@@ -190,4 +190,12 @@ mod demo_examples {
             Ok(2_000_000_000_000_000.0)
         );
     }
+
+    #[test]
+    fn formatting_uses_micro_sign_when_enabled() {
+        let mut f = Formatter::new();
+        f.with_micro_sign(true);
+        // 0.000001 -> 1.00 µ
+        assert_eq!(f.format(0.000001_f64), "1.00 µ");
+    }
 }

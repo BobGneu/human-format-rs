@@ -49,6 +49,7 @@ pub struct Formatter {
     scales: Scales,
     forced_units: String,
     forced_suffix: String,
+    use_micro_sign: bool,
 }
 
 impl Default for Formatter {
@@ -59,6 +60,7 @@ impl Default for Formatter {
             scales: Scales::new(),
             forced_units: "".to_owned(),
             forced_suffix: "".to_owned(),
+            use_micro_sign: false,
         }
     }
 }
@@ -68,6 +70,7 @@ impl Default for Formatter {
 pub struct Scales {
     base: u32,
     suffixes: Vec<String>,
+    suffixes_neg: Vec<String>,
 }
 
 impl Formatter {
@@ -111,6 +114,13 @@ impl Formatter {
         self
     }
 
+    /// Enable using the micro sign `µ` in formatted output when fractional suffix is `u`.
+    pub fn with_micro_sign(&mut self, enable: bool) -> &mut Self {
+        self.use_micro_sign = enable;
+
+        self
+    }
+
     /// Formats the number into a string
     pub fn format(&self, value: f64) -> String {
         // Handle non-finite values explicitly to avoid loops in scaling logic
@@ -128,11 +138,17 @@ impl Formatter {
 
         let scaled_value = self.scales.to_scaled_value(value);
 
+        let out_suffix = if self.use_micro_sign && scaled_value.suffix == "u" {
+            "µ".to_owned()
+        } else {
+            scaled_value.suffix.clone()
+        };
+
         format!(
             "{:.width$}{}{}{}",
             scaled_value.value,
             self.separator,
-            scaled_value.suffix,
+            out_suffix,
             self.forced_units,
             width = self.decimals
         )
@@ -200,6 +216,9 @@ impl Formatter {
             .trim_start_matches(&number)
             .trim_start_matches(&self.separator)
             .to_string();
+
+        // Normalize common variants: acceptance of micro sign 'µ'
+        let suffix = suffix.replace('\u{00B5}', "u");
 
         Ok((number, suffix))
     }
@@ -292,6 +311,19 @@ impl Scales {
                 "R".to_owned(),
                 "Q".to_owned(),
             ],
+            suffixes_neg: vec![
+                "".to_owned(),
+                "m".to_owned(), // milli
+                "u".to_owned(), // micro (use 'u' ascii for micro)
+                "n".to_owned(), // nano
+                "p".to_owned(), // pico
+                "f".to_owned(), // femto
+                "a".to_owned(), // atto
+                "z".to_owned(), // zepto
+                "y".to_owned(), // yocto
+                "r".to_owned(), // ronto (10^-27)
+                "q".to_owned(), // quecto (10^-30)
+            ],
         }
     }
 
@@ -313,6 +345,8 @@ impl Scales {
                 "Ri".to_owned(),
                 "Qi".to_owned(),
             ],
+            // binary scales usually don't define fractional SI-like prefixes; keep empty placeholder
+            suffixes_neg: vec!["".to_owned()],
         }
     }
 
@@ -337,28 +371,38 @@ impl Scales {
     }
 
     fn try_get_magnitude_multiplier(&self, value: &str) -> Result<f64, ParseError> {
-        self.suffixes
+        // positive suffixes
+        if let Some((idx, _)) = self
+            .suffixes
             .iter()
             .enumerate()
-            .find_map(|(idx, x)| {
-                if value == x {
-                    Some((self.base as f64).powi(idx as i32))
-                } else {
-                    None
-                }
-            })
-            .ok_or_else(|| {
-                ParseError::UnknownSuffix(format!(
-                    "{}; valid suffixes are: {}",
-                    value,
-                    self.suffixes
-                        .iter()
-                        .filter(|x| !x.trim().is_empty())
-                        .map(String::to_string)
-                        .collect::<Vec<_>>()
-                        .join(", ")
-                ))
-            })
+            .find(|(_, x)| x == &value)
+        {
+            return Ok((self.base as f64).powi(idx as i32));
+        }
+
+        // negative suffixes (fractions)
+        if let Some((idx, _)) = self
+            .suffixes_neg
+            .iter()
+            .enumerate()
+            .find(|(_, x)| x == &value)
+        {
+            // idx 0 corresponds to multiplier 1; idx 1 => base^-1, idx 2 => base^-2
+            let exp = -(idx as i32);
+            return Ok((self.base as f64).powi(exp));
+        }
+
+        // build valid suffix list for error message
+        let mut valid: Vec<String> = Vec::new();
+        valid.extend(self.suffixes.iter().filter(|x| !x.trim().is_empty()).cloned());
+        valid.extend(self.suffixes_neg.iter().filter(|x| !x.trim().is_empty()).cloned());
+
+        Err(ParseError::UnknownSuffix(format!(
+            "{}; valid suffixes are: {}",
+            value,
+            valid.join(", ")
+        )))
     }
 
     fn to_scaled_value(&self, value: f64) -> ScaledValue {
@@ -368,14 +412,35 @@ impl Scales {
 
         // Prevent infinite loops for non-finite values and cap index to available suffixes
         let last_index = self.suffixes.len().saturating_sub(1);
-        while value >= base && index < last_index {
-            value /= base;
-            index += 1;
-        }
+        let last_neg = self.suffixes_neg.len().saturating_sub(1);
 
-        ScaledValue {
-            value,
-            suffix: self.suffixes[index].to_owned(),
+        if value >= base {
+            while value >= base && index < last_index {
+                value /= base;
+                index += 1;
+            }
+
+            ScaledValue {
+                value,
+                suffix: self.suffixes[index].to_owned(),
+            }
+        } else if value > 0.0 && value < 1.0 {
+            // Use negative prefixes for fractional values
+            let mut neg_idx: usize = 0;
+            while value < 1.0 && neg_idx < last_neg {
+                value *= base;
+                neg_idx += 1;
+            }
+
+            ScaledValue {
+                value,
+                suffix: self.suffixes_neg[neg_idx].to_owned(),
+            }
+        } else {
+            ScaledValue {
+                value,
+                suffix: self.suffixes[0].to_owned(),
+            }
         }
     }
 }
