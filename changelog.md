@@ -10,14 +10,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 -   New tests for cases out in the wild
- -   `try_parse` which returns `Result<f64, ParseError>` instead of panicking
- -   `ParseError` enum with variants for `EmptyInput`, `InvalidNumber`, and `UnknownSuffix`
- -   `parse_or_clamp` convenience method to optionally clamp unknown suffixes to the largest multiplier
- -   Doctests and README snippets demonstrating `try_parse`, binary scales, units and negative numbers
- -   Support for the newest SI prefixes: `R`/`Q` (ronna/quetta) and `r`/`q` (ronto/que cto)
- -   Optional micro sign formatting and parsing: accept `µ` and output `µ` when enabled via `Formatter::with_micro_sign(true)`
- -   Forced suffix formatting: `Formatter::with_suffix("M")` will scale output to the requested suffix when possible (e.g., `100000 -> 0.10 M`)
- -   New `Scales::Time()` with explicit time unit multipliers (`ns`, `us`, `ms`, `s`, `m`, `h`, `d`, `w`, `mo`, `qtr`, `y`, `dec`, `c`, `kyr`, `Myr`, `Gyr`, and aliases)
+-   `try_parse` which returns `Result<f64, ParseError>` instead of panicking
+-   `ParseError` enum with variants for `EmptyInput`, `InvalidNumber`, and `UnknownSuffix`
+-   `parse_or_clamp` convenience method to optionally clamp unknown suffixes to the largest multiplier (now respects `explicit_map` when present)
+-   Doctests and README snippets demonstrating `try_parse`, binary scales, units and negative numbers
+-   Support for the newest SI prefixes: `R`/`Q` (ronna/quetta) and `r`/`q` (ronto/que cto)
+-   Optional micro sign formatting and parsing: accept `µ` and output `µ` when enabled via `Formatter::with_micro_sign(true)`
+-   Forced suffix formatting: `Formatter::with_suffix("M")` will scale output to the requested suffix when possible (e.g., `100000 -> 0.10 M`)
+-   New `Scales::Time()` with explicit time unit multipliers (`ns`, `us`, `ms`, `s`, `m`, `h`, `d`, `w`, `mo`, `qtr`, `y`, `dec`, `c`, `kyr`, `Myr`, `Gyr`, and aliases)
 
 ### Changed
 
@@ -25,9 +25,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     -   removed verbose flag as it does not appear to be necessary any longer
 -   Renamed `master` branch to `main`
 -   lower casing si suffixes - [PR#27](https://github.com/BobGneu/human-format-rs/pull/27) by [jdrouet](https://github.com/jdrouet)
- -   Replaced silent clamping/0.0 multiplier lookup with explicit `try_get_magnitude_multiplier` returning error on unknown suffix
- -   Refactored parsing internals to centralize numeric/suffix extraction and reduce duplication
- -   Added edge-case tests (empty input, trailing garbage, comma-decimal behavior, NaN/Infinity, rounding boundaries, and very large magnitudes)
+-   Replaced silent clamping/0.0 multiplier lookup with explicit `try_get_magnitude_multiplier` returning error on unknown suffix
+-   Refactored parsing internals to centralize numeric/suffix extraction and reduce duplication
+-   Added edge-case tests (empty input, trailing garbage, comma-decimal behavior, NaN/Infinity, rounding boundaries, and very large magnitudes)
 
 ### Removed
 

@@ -127,6 +127,23 @@ To avoid ambiguity, prefer longer suffixes or specify units explicitly with `wit
 
 Suffix matching is case-sensitive: `M` (mega) is not the same as `m` (milli). If you want different aliases or case-insensitive parsing, add those aliases to the `Scales` you use.
 
+## parse_or_clamp behavior
+
+The `parse_or_clamp` helper can be used when accepting user-provided suffixes that may be unknown or misspelled. Call it with `clamp = true` to interpret unknown suffixes as the largest available magnitude in the active `Scales`.
+
+Important: when a `Scales` provides an `explicit_map` (for example `Scales::Time()`), `parse_or_clamp` will clamp to the largest multiplier defined in that explicit map rather than assuming a power-of-base value. This ensures consistent behavior for non-power-of-base scales such as time units (where the largest defined unit is `Gyr`).
+
+## Testing and correctness notes
+
+We added a number of focused tests to ensure robust handling of edge-cases:
+
+- Micro sign parsing and optional micro-sign output (tests/micro_sign.rs).
+- Forced-suffix behavior including unknown-suffix fallbacks (tests/forced_suffix.rs).
+- SI round-trip formatting for new prefixes `R`/`Q` and parsing validation (tests/si_roundtrip.rs).
+- Time scale edge cases: months, quarters, parsing case-sensitivity, and clamp behavior (tests/time_edgecases.rs).
+
+If you rely on case-insensitive parsing or custom aliases, construct a `Scales` with the aliases you need and pass it to `Formatter::with_scales`.
+
 ## Contributing
 
 Contributions are welcome.
