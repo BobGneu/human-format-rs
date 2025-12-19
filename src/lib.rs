@@ -130,7 +130,7 @@ impl Formatter {
         }
 
         if value < 0.0 {
-            return format!("-{}", self.format(value * -1.0));
+            return format!("-{}", self.format(-value));
         }
 
         if value.is_infinite() {
