@@ -163,7 +163,7 @@ mod demo_examples {
         assert!(result.is_err());
         assert_eq!(
             result.unwrap_err(),
-            "Unknown suffix: DN, valid suffixes are: ki, Mi, Gi, Ti, Pi, Ei, Zi, Yi"
+            "Unknown suffix: DN, valid suffixes are: ki, Mi, Gi, Ti, Pi, Ei, Zi, Yi, Ri, Qi"
         );
     }
 

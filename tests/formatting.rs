@@ -27,5 +27,13 @@ mod formatting {
         assert_eq!(Formatter::new().format(1.2123123422324232e18), "1.21 E");
 
         assert_eq!(Formatter::new().format(1.2123123422324232e26), "121.23 Y");
+
+        assert_eq!(Formatter::new().format(5.58559632792669e27), "5.59 R");
+
+        assert_eq!(Formatter::new().format(5.58559632792669e30), "5.59 Q");
+
+        assert_eq!(Formatter::new().format(5.58559632792669e31), "55.86 Q");
+
+        assert_eq!(Formatter::new().format(5.58559632792669e35), "558559.63 Q");
     }
 }
