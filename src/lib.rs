@@ -429,16 +429,7 @@ impl Scales {
 
         Scales {
             base: 60,
-            suffixes: vec![
-                "".to_owned(),
-                "s".to_owned(),
-                "m".to_owned(),
-                "h".to_owned(),
-                "d".to_owned(),
-                "w".to_owned(),
-                "mo".to_owned(),
-                "y".to_owned(),
-            ],
+            suffixes: vec![],
             suffixes_neg: vec!["".to_owned()],
             explicit_map: Some(map),
         }
