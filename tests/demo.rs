@@ -267,7 +267,7 @@ mod demo_examples {
         let mut f = Formatter::new();
         f.with_suffix("DN");
         let s = f.format(1000.0);
-        assert!(s.contains("k") || s.contains("M") || s.contains(""));
+        assert_eq!(s, "1.00 k");
 
         // forcing very large suffix produces < 1 values
         let mut f2 = Formatter::new();

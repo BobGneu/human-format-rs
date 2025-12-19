@@ -46,7 +46,7 @@ assert_eq!(s, "1.3 k");
 Use binary scales (base 1024):
 
 ```rust
-use human_format::Scales;
+use human_format::{Formatter, Scales};
 let s = Formatter::new().with_scales(Scales::Binary()).format(1024.0);
 assert_eq!(s, "1.00 ki");
 ```
@@ -105,8 +105,7 @@ Parsing accepts both `u` and `µ`.
 `Scales::Time()` uses a set of explicit unit multipliers for time. It uses average values where needed (for example, the average year is 365.2425 days). Use `Scales::Time()` when you want time-aware formatting and parsing.
 
 ```rust
-use human_format::Formatter;
-use human_format::Scales;
+use human_format::{Formatter, Scales};
 
 let mut ft = Formatter::new();
 ft.with_scales(Scales::Time());
