@@ -169,6 +169,12 @@ impl Formatter {
     }
 
     /// Parse a string back into a float value.
+    ///
+    /// This convenience wrapper unwraps the result of `try_parse` and will panic
+    /// on malformed input. It is feature-gated behind `panic_parse` so that
+    /// consumers who prefer fallible parsing do not get a panicking API by
+    /// default.
+    #[cfg(feature = "panic_parse")]
     #[deprecated(
         note = "Use `try_parse` which returns Result and does not panic on malformed input"
     )]
@@ -266,6 +272,25 @@ impl Formatter {
         match self.scales.try_get_magnitude_multiplier(&suffix) {
             Ok(mult) => Ok(number * mult),
             Err(ParseError::UnknownSuffix(_)) if clamp => {
+                // If scales has an explicit_map (e.g., Time), clamp to the
+                // largest explicit multiplier rather than assuming a power of
+                // `base` matching the last suffix index.
+                if let Some(map) = &self.scales.explicit_map {
+                    // Find the maximum multiplier present in the explicit map.
+                    let mut max_mult: Option<f64> = None;
+                    for v in map.values() {
+                        let v = *v;
+                        max_mult = Some(match max_mult {
+                            None => v,
+                            Some(m) => m.max(v),
+                        });
+                    }
+
+                    if let Some(m) = max_mult {
+                        return Ok(number * m);
+                    }
+                }
+
                 let last_index = self.scales.suffixes.len().saturating_sub(1);
                 let mult = (self.scales.base as f64).powi(last_index as i32);
                 Ok(number * mult)
