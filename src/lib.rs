@@ -137,7 +137,20 @@ impl Formatter {
             return "inf".to_owned();
         }
 
-        let scaled_value = self.scales.to_scaled_value(value);
+        // If a forced suffix is provided, attempt to scale to that suffix
+        let scaled_value = if !self.forced_suffix.is_empty() {
+            // normalize micro sign in forced suffix when looking up
+            let lookup = self.forced_suffix.replace('\u{00B5}', "u");
+            match self.scales.try_get_magnitude_multiplier(&lookup) {
+                Ok(mult) => ScaledValue {
+                    value: value / mult,
+                    suffix: self.forced_suffix.clone(),
+                },
+                Err(_) => self.scales.to_scaled_value(value),
+            }
+        } else {
+            self.scales.to_scaled_value(value)
+        };
 
         let out_suffix = if self.use_micro_sign && scaled_value.suffix == "u" {
             "µ".to_owned()

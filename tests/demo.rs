@@ -242,4 +242,12 @@ mod demo_examples {
 
         assert_eq!(f.try_parse("1 qtr").unwrap(), quarter_secs);
     }
+
+    #[test]
+    fn forced_suffix_scaling() {
+        let mut f = Formatter::new();
+        f.with_suffix("M");
+        // 100000 -> 0.10M (100000 / 1_000_000 = 0.1)
+        assert_eq!(f.format(100000.0), "0.10 M");
+    }
 }
