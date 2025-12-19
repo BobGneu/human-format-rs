@@ -1,11 +1,11 @@
-mod si;
 mod binary;
 mod forced;
-mod time;
 mod micro;
+mod si;
+mod time;
 
-pub use si::*;
 pub use binary::*;
 pub use forced::*;
-pub use time::*;
 pub use micro::*;
+pub use si::*;
+pub use time::*;

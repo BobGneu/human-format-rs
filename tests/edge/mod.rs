@@ -1,13 +1,13 @@
 // Consolidated edge-case tests
 
-mod parse_errors;
-mod nan_inf;
-mod rounding;
-mod large_values;
 mod clamp_behavior;
+mod large_values;
+mod nan_inf;
+mod parse_errors;
+mod rounding;
 
-pub use parse_errors::*;
-pub use nan_inf::*;
-pub use rounding::*;
-pub use large_values::*;
 pub use clamp_behavior::*;
+pub use large_values::*;
+pub use nan_inf::*;
+pub use parse_errors::*;
+pub use rounding::*;

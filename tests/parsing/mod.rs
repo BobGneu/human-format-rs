@@ -1,9 +1,9 @@
+mod clamp;
+mod micro;
 mod si;
 mod suffixes;
-mod micro;
-mod clamp;
 
+pub use clamp::*;
+pub use micro::*;
 pub use si::*;
 pub use suffixes::*;
-pub use micro::*;
-pub use clamp::*;

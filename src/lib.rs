@@ -177,7 +177,7 @@ impl Formatter {
     /// default.
     #[cfg(feature = "panic_parse")]
     #[deprecated(
-        note = "Use `try_parse` which returns Result and does not panic on malformed input"
+        note = "Use `try_parse`, which returns `Result<f64, ParseError>` and does not panic on malformed input"
     )]
     pub fn parse(&self, value: &str) -> f64 {
         self.try_parse(value).unwrap()
@@ -277,19 +277,9 @@ impl Formatter {
                 // largest explicit multiplier rather than assuming a power of
                 // `base` matching the last suffix index.
                 if let Some(map) = &self.scales.explicit_map {
-                    // Find the maximum multiplier present in the explicit map.
-                    let mut max_mult: Option<f64> = None;
-
-                    for v in map.values() {
-                        let v = *v;
-                        max_mult = Some(match max_mult {
-                            None => v,
-                            Some(m) => m.max(v),
-                        });
-                    }
-
-                    if let Some(m) = max_mult {
-                        return Ok(number * m);
+                    if !map.is_empty() {
+                        let max_mult = map.values().copied().fold(f64::NEG_INFINITY, f64::max);
+                        return Ok(number * max_mult);
                     }
                 }
 
@@ -540,7 +530,7 @@ impl Scales {
             // Build vector of (suffix, multiplier) and sort descending by multiplier
             let mut entries: Vec<(String, f64)> =
                 map.iter().map(|(k, v)| (k.clone(), *v)).collect();
-            entries.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());
+            entries.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(std::cmp::Ordering::Equal));
 
             if value > 0.0 {
                 for (suf, mult) in entries.iter() {

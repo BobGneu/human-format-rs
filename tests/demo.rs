@@ -5,11 +5,6 @@ mod demo_examples {
     use human_format::*;
 
     #[test]
-    fn should_allow_use_of_si_scale_implicitly() {
-        assert_eq!(Formatter::new().format(1000 as f64), "1.00 k");
-    }
-
-    #[test]
     fn should_allow_explicit_decimals() {
         assert_eq!(
             Formatter::new().with_decimals(1).format(1000 as f64),

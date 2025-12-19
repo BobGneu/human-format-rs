@@ -59,10 +59,12 @@ Convert a human-friendly string back to a `f64` with `try_parse`.
 use human_format::{Formatter, Scales};
 
 let f = Formatter::new();
+
 assert_eq!(f.try_parse("1.00 k").unwrap(), 1000.0);
 
 let mut fb = Formatter::new();
 fb.with_scales(Scales::Binary());
+
 assert_eq!(fb.try_parse("1.00 ki").unwrap(), 1024.0);
 ```
 
@@ -73,8 +75,11 @@ The parser accepts the micro sign `µ` as input.
 To force output to a certain suffix, use `with_suffix`. The value is scaled to match that suffix if possible.
 
 ```rust
+use human_format::Formatter;
+
 let mut f = Formatter::new();
 f.with_suffix("M");
+
 assert_eq!(f.format(100_000.0), "0.10 M");
 ```
 
@@ -85,8 +90,11 @@ If the suffix is not valid for the current `Scales`, the formatter falls back to
 Use `with_micro_sign(true)` to show `µ` for micro values in the output.
 
 ```rust
+use human_format::Formatter;
+
 let mut f = Formatter::new();
 f.with_micro_sign(true);
+
 assert_eq!(f.format(0.000001_f64), "1.00 µ");
 ```
 
@@ -97,9 +105,12 @@ Parsing accepts both `u` and `µ`.
 `Scales::Time()` uses a set of explicit unit multipliers for time. It uses average values where needed (for example, the average year is 365.2425 days). Use `Scales::Time()` when you want time-aware formatting and parsing.
 
 ```rust
+use human_format::Formatter;
 use human_format::Scales;
+
 let mut ft = Formatter::new();
 ft.with_scales(Scales::Time());
+
 // 90 seconds -> 1.50 m (minutes)
 assert_eq!(ft.format(90.0), "1.50 m");
 // Quarters (qtr) parse as three-month periods
@@ -137,10 +148,10 @@ Important: when a `Scales` provides an `explicit_map` (for example `Scales::Time
 
 We added a number of focused tests to ensure robust handling of edge-cases:
 
-- Micro sign parsing and optional micro-sign output (tests/micro_sign.rs).
-- Forced-suffix behavior including unknown-suffix fallbacks (tests/forced_suffix.rs).
-- SI round-trip formatting for new prefixes `R`/`Q` and parsing validation (tests/si_roundtrip.rs).
-- Time scale edge cases: months, quarters, parsing case-sensitivity, and clamp behavior (tests/time_edgecases.rs).
+-   Micro sign parsing and optional micro-sign output (tests/micro_sign.rs).
+-   Forced-suffix behavior including unknown-suffix fallbacks (tests/forced_suffix.rs).
+-   SI round-trip formatting for new prefixes `R`/`Q` and parsing validation (tests/si_roundtrip.rs).
+-   Time scale edge cases: months, quarters, parsing case-sensitivity, and clamp behavior (tests/time_edgecases.rs).
 
 If you rely on case-insensitive parsing or custom aliases, construct a `Scales` with the aliases you need and pass it to `Formatter::with_scales`.
 
