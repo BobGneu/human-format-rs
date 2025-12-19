@@ -198,4 +198,48 @@ mod demo_examples {
         // 0.000001 -> 1.00 µ
         assert_eq!(f.format(0.000001_f64), "1.00 µ");
     }
+
+    #[test]
+    fn time_scale_format_and_parse() {
+        // 90 seconds should be formatted to 1.50 m when using time scales (minutes)
+        let mut f = Formatter::new();
+        f.with_scales(Scales::Time());
+        assert_eq!(f.format(90.0), "1.50 m");
+
+        // Parsing "1.5 m" with time scales should give 90 seconds
+        let mut fp = Formatter::new();
+        fp.with_scales(Scales::Time()).with_units("s");
+        assert_eq!(fp.try_parse("1.5 m").unwrap(), 90.0);
+    }
+
+    #[test]
+    fn time_scale_long_units() {
+        let mut f = Formatter::new();
+        f.with_scales(Scales::Time());
+
+        // 1 month ~ average month in seconds
+        let month_secs = (365.2425 * 86400.0) / 12.0;
+        assert_eq!(f.try_parse("1 mo").unwrap(), month_secs);
+
+        // 1 year
+        let year_secs = 365.2425 * 86400.0;
+        assert_eq!(f.try_parse("1 y").unwrap(), year_secs);
+
+        // 1 decade = 10 years
+        assert_eq!(f.try_parse("1 dec").unwrap(), 10.0 * year_secs);
+
+        // 1 century = 100 years
+        assert_eq!(f.try_parse("1 c").unwrap(), 100.0 * year_secs);
+    }
+
+    #[test]
+    fn time_scale_quarters() {
+        let mut f = Formatter::new();
+        f.with_scales(Scales::Time());
+
+        let month_secs = (365.2425 * 86400.0) / 12.0;
+        let quarter_secs = 3.0 * month_secs;
+
+        assert_eq!(f.try_parse("1 qtr").unwrap(), quarter_secs);
+    }
 }

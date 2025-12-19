@@ -71,6 +71,7 @@ pub struct Scales {
     base: u32,
     suffixes: Vec<String>,
     suffixes_neg: Vec<String>,
+    explicit_map: Option<std::collections::HashMap<String, f64>>,
 }
 
 impl Formatter {
@@ -324,6 +325,7 @@ impl Scales {
                 "r".to_owned(), // ronto (10^-27)
                 "q".to_owned(), // quecto (10^-30)
             ],
+            explicit_map: None,
         }
     }
 
@@ -347,6 +349,60 @@ impl Scales {
             ],
             // binary scales usually don't define fractional SI-like prefixes; keep empty placeholder
             suffixes_neg: vec!["".to_owned()],
+            explicit_map: None,
+        }
+    }
+
+    /// Instantiates a new `Scales` for time units.
+    ///
+    /// This maps common time suffixes to multipliers in seconds.
+    #[allow(non_snake_case)]
+    pub fn Time() -> Self {
+        use std::collections::HashMap;
+
+        let mut map: HashMap<String, f64> = HashMap::new();
+        map.insert("ns".to_owned(), 1e-9);
+        map.insert("us".to_owned(), 1e-6);
+        map.insert("ms".to_owned(), 1e-3);
+        map.insert("s".to_owned(), 1.0);
+        map.insert("m".to_owned(), 60.0);
+        map.insert("h".to_owned(), 3600.0);
+        map.insert("d".to_owned(), 86400.0);
+        map.insert("w".to_owned(), 604800.0);
+
+        // longer period units using average definitions
+        let year_secs = 365.2425 * 86400.0; // average Gregorian year
+        let month_secs = year_secs / 12.0; // average month
+        map.insert("mo".to_owned(), month_secs);
+        map.insert("month".to_owned(), month_secs);
+        // quarters: three-month periods
+        map.insert("qtr".to_owned(), 3.0 * month_secs);
+        map.insert("y".to_owned(), year_secs);
+        map.insert("yr".to_owned(), year_secs);
+        map.insert("year".to_owned(), year_secs);
+        map.insert("dec".to_owned(), 10.0 * year_secs);
+        map.insert("decade".to_owned(), 10.0 * year_secs);
+        map.insert("c".to_owned(), 100.0 * year_secs);
+        map.insert("century".to_owned(), 100.0 * year_secs);
+        map.insert("kyr".to_owned(), 1000.0 * year_secs); // millennium (kilo-year)
+        map.insert("millennium".to_owned(), 1000.0 * year_secs);
+        map.insert("Myr".to_owned(), 1.0e6 * year_secs);
+        map.insert("Gyr".to_owned(), 1.0e9 * year_secs);
+
+        Scales {
+            base: 60,
+            suffixes: vec![
+                "".to_owned(),
+                "s".to_owned(),
+                "m".to_owned(),
+                "h".to_owned(),
+                "d".to_owned(),
+                "w".to_owned(),
+                "mo".to_owned(),
+                "y".to_owned(),
+            ],
+            suffixes_neg: vec!["".to_owned()],
+            explicit_map: Some(map),
         }
     }
 
@@ -371,13 +427,14 @@ impl Scales {
     }
 
     fn try_get_magnitude_multiplier(&self, value: &str) -> Result<f64, ParseError> {
+        // If an explicit mapping exists (e.g., time units), prefer it
+        if let Some(map) = &self.explicit_map {
+            if let Some(val) = map.get(value) {
+                return Ok(*val);
+            }
+        }
         // positive suffixes
-        if let Some((idx, _)) = self
-            .suffixes
-            .iter()
-            .enumerate()
-            .find(|(_, x)| x == &value)
-        {
+        if let Some((idx, _)) = self.suffixes.iter().enumerate().find(|(_, x)| x == &value) {
             return Ok((self.base as f64).powi(idx as i32));
         }
 
@@ -395,8 +452,21 @@ impl Scales {
 
         // build valid suffix list for error message
         let mut valid: Vec<String> = Vec::new();
-        valid.extend(self.suffixes.iter().filter(|x| !x.trim().is_empty()).cloned());
-        valid.extend(self.suffixes_neg.iter().filter(|x| !x.trim().is_empty()).cloned());
+        if let Some(map) = &self.explicit_map {
+            valid.extend(map.keys().cloned());
+        }
+        valid.extend(
+            self.suffixes
+                .iter()
+                .filter(|x| !x.trim().is_empty())
+                .cloned(),
+        );
+        valid.extend(
+            self.suffixes_neg
+                .iter()
+                .filter(|x| !x.trim().is_empty())
+                .cloned(),
+        );
 
         Err(ParseError::UnknownSuffix(format!(
             "{}; valid suffixes are: {}",
@@ -413,6 +483,32 @@ impl Scales {
         // Prevent infinite loops for non-finite values and cap index to available suffixes
         let last_index = self.suffixes.len().saturating_sub(1);
         let last_neg = self.suffixes_neg.len().saturating_sub(1);
+
+        // If explicit map provided (e.g., Time), prefer selecting suffix from it
+        if let Some(map) = &self.explicit_map {
+            // Build vector of (suffix, multiplier) and sort descending by multiplier
+            let mut entries: Vec<(String, f64)> =
+                map.iter().map(|(k, v)| (k.clone(), *v)).collect();
+            entries.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());
+
+            if value > 0.0 {
+                for (suf, mult) in entries.iter() {
+                    if value >= *mult {
+                        return ScaledValue {
+                            value: value / *mult,
+                            suffix: suf.clone(),
+                        };
+                    }
+                }
+                // If smaller than smallest multiplier, use smallest (e.g., ns)
+                if let Some((suf, mult)) = entries.last() {
+                    return ScaledValue {
+                        value: value / *mult,
+                        suffix: suf.clone(),
+                    };
+                }
+            }
+        }
 
         if value >= base {
             while value >= base && index < last_index {
