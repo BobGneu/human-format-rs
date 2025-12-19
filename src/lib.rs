@@ -1,7 +1,6 @@
 #![doc(html_root_url = "https://docs.rs/human_format")]
 
-//! `human_format` provides facilitates creating a formatted string, converting between numbers that are beyond typical
-//! needs for humans into a simpler string that conveys the gist of the meaning of the number.
+//! `human_format` is a library for formatting numbers into human readable strings. It supports SI, Time and Binary scales out of the box, and allows for custom scales as well.
 //!
 //! ## Setup
 //!
@@ -11,7 +10,9 @@
 //! $ cargo add human_format
 //! ```
 //!
-//! Print some human readable strings
+//! ## Usage
+//!
+//! Print human readable strings from numbers using SI scales by default
 //!
 //! ```rust
 //! // "1.00 K"
@@ -41,7 +42,7 @@ struct ScaledValue {
     suffix: String,
 }
 
-/// Entry point to the lib. Use this to handle your formatting needs.
+/// Entry point to the library. Use this to handle your formatting needs.
 #[derive(Debug)]
 pub struct Formatter {
     decimals: usize,
@@ -278,6 +279,7 @@ impl Formatter {
                 if let Some(map) = &self.scales.explicit_map {
                     // Find the maximum multiplier present in the explicit map.
                     let mut max_mult: Option<f64> = None;
+
                     for v in map.values() {
                         let v = *v;
                         max_mult = Some(match max_mult {
@@ -293,6 +295,7 @@ impl Formatter {
 
                 let last_index = self.scales.suffixes.len().saturating_sub(1);
                 let mult = (self.scales.base as f64).powi(last_index as i32);
+
                 Ok(number * mult)
             }
             Err(e) => Err(e),
@@ -411,20 +414,27 @@ impl Scales {
         // longer period units using average definitions
         let year_secs = 365.2425 * 86400.0; // average Gregorian year
         let month_secs = year_secs / 12.0; // average month
+
         map.insert("mo".to_owned(), month_secs);
         map.insert("month".to_owned(), month_secs);
+
         // quarters: three-month periods
         map.insert("qtr".to_owned(), 3.0 * month_secs);
         map.insert("y".to_owned(), year_secs);
         map.insert("yr".to_owned(), year_secs);
         map.insert("year".to_owned(), year_secs);
+
         map.insert("dec".to_owned(), 10.0 * year_secs);
         map.insert("decade".to_owned(), 10.0 * year_secs);
+
         map.insert("c".to_owned(), 100.0 * year_secs);
         map.insert("century".to_owned(), 100.0 * year_secs);
+
         map.insert("kyr".to_owned(), 1000.0 * year_secs); // millennium (kilo-year)
         map.insert("millennium".to_owned(), 1000.0 * year_secs);
+
         map.insert("Myr".to_owned(), 1.0e6 * year_secs);
+
         map.insert("Gyr".to_owned(), 1.0e9 * year_secs);
 
         Scales {
@@ -471,6 +481,7 @@ impl Scales {
                 return Ok(*val);
             }
         }
+
         // positive suffixes
         if let Some((idx, _)) = self.suffixes.iter().enumerate().find(|(_, x)| x == &value) {
             return Ok((self.base as f64).powi(idx as i32));
@@ -493,12 +504,14 @@ impl Scales {
         if let Some(map) = &self.explicit_map {
             valid.extend(map.keys().cloned());
         }
+
         valid.extend(
             self.suffixes
                 .iter()
                 .filter(|x| !x.trim().is_empty())
                 .cloned(),
         );
+
         valid.extend(
             self.suffixes_neg
                 .iter()
@@ -538,6 +551,7 @@ impl Scales {
                         };
                     }
                 }
+
                 // If smaller than smallest multiplier, use smallest (e.g., ns)
                 if let Some((suf, mult)) = entries.last() {
                     return ScaledValue {
