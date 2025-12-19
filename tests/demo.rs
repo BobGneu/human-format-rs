@@ -250,4 +250,47 @@ mod demo_examples {
         // 100000 -> 0.10M (100000 / 1_000_000 = 0.1)
         assert_eq!(f.format(100000.0), "0.10 M");
     }
+
+    #[test]
+    fn micro_sign_parsing_and_formatting() {
+        // parsing accepts µ
+        assert_eq!(Formatter::new().try_parse("1.0 µ").unwrap(), 1e-6);
+
+        // formatting uses u by default
+        let f = Formatter::new();
+        assert!(f.format(1e-6).contains("u") || f.format(1e-6).contains("µ"));
+
+        // enable µ output
+        let mut fm = Formatter::new();
+        fm.with_micro_sign(true);
+        assert_eq!(fm.format(1e-6), "1.00 µ");
+    }
+
+    #[test]
+    fn forced_suffix_unknown_and_extremes() {
+        // unknown forced suffix falls back
+        let mut f = Formatter::new();
+        f.with_suffix("DN");
+        let s = f.format(1000.0);
+        assert!(s.contains("k") || s.contains("M") || s.contains(""));
+
+        // forcing very large suffix produces < 1 values
+        let mut f2 = Formatter::new();
+        f2.with_suffix("Q");
+        assert!(f2.format(1e3).starts_with("0."));
+    }
+
+    #[test]
+    fn time_scale_round_trip_and_case() {
+        let mut f = Formatter::new();
+        f.with_scales(Scales::Time());
+
+        // months and years
+        let month_secs = (365.2425 * 86400.0) / 12.0;
+        assert_eq!(f.try_parse("1 mo").unwrap(), month_secs);
+        assert_eq!(f.try_parse("1 y").unwrap(), 365.2425 * 86400.0);
+
+        // case sensitivity: use 'qtr' quarter alias
+        assert_eq!(f.try_parse("1 qtr").unwrap(), 3.0 * month_secs);
+    }
 }

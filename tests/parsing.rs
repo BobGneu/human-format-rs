@@ -40,6 +40,33 @@ mod parsing {
     }
 
     #[test]
+    fn round_trip_ronna_and_quetta() {
+        let f = Formatter::new();
+        // format and parse back large SI values
+        let s = f.format(1e27);
+        assert_eq!(f.try_parse(&s).unwrap(), 1e27);
+
+        let s2 = f.format(1e30);
+        assert_eq!(f.try_parse(&s2).unwrap(), 1e30);
+
+        // and small-side prefixes
+        let s3 = f.format(1e-27);
+        assert_eq!(f.try_parse(&s3).unwrap(), 1e-27);
+
+        let s4 = f.format(1e-30);
+        assert_eq!(f.try_parse(&s4).unwrap(), 1e-30);
+    }
+
+    #[test]
+    fn parse_or_clamp_largest_suffix() {
+        let f = Formatter::new();
+        // unknown suffix errors when clamp == false
+        assert!(f.parse_or_clamp("1.0 DN", false).is_err());
+        // clamp to largest suffix (Q -> 10^30)
+        assert_eq!(f.parse_or_clamp("1.0 DN", true).unwrap(), 1e30);
+    }
+
+    #[test]
     fn should_format_and_parse_ronna_and_quetta() {
         let f = Formatter::new();
         // 1 R -> 10^27

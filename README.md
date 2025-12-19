@@ -114,6 +114,19 @@ For more examples please consult [tests/demo.rs](https://github.com/BobGneu/huma
 -   Very large and very small numbers can lose precision when using `f64`.
 -   The `with_suffix` method uses the same suffix strings that `try_parse` accepts.
 
+### Suffix vs unit ambiguity
+
+Some short tokens can be ambiguous. For example, the single letter `m` can mean **milli** (a magnitude suffix) or **meter** (a measurement unit) depending on how you configure the `Formatter`:
+
+-   `Formatter::new().with_suffix("m")` treats `m` as milli (scale).
+-   `Formatter::new().with_units("m")` appends `m` as the units string (meter).
+
+To avoid ambiguity, prefer longer suffixes or specify units explicitly with `with_units`.
+
+### Case sensitivity
+
+Suffix matching is case-sensitive: `M` (mega) is not the same as `m` (milli). If you want different aliases or case-insensitive parsing, add those aliases to the `Scales` you use.
+
 ## Contributing
 
 Contributions are welcome.
