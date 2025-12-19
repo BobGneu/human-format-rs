@@ -7,25 +7,28 @@ mod parsing {
     #[test]
     fn should_parse_1_0_g_as_1000000000() {
         let formatter = Formatter::new();
-        assert_eq!(formatter.parse("1.0 G"), 10.0_f64.powf(9.0));
+        assert_eq!(formatter.try_parse("1.0 G").unwrap(), 10.0_f64.powf(9.0));
     }
 
     #[test]
     fn should_parse_11248924551_k_as_1_1248924551e13() {
         let formatter = Formatter::new();
-        assert_eq!(formatter.parse("11248924551 k"), 1.1248924551e13);
+        assert_eq!(
+            formatter.try_parse("11248924551 k").unwrap(),
+            1.1248924551e13
+        );
     }
 
     #[test]
     fn should_parse_55_86_q_as_5_586_e31() {
         let formatter = Formatter::new();
-        assert_eq!(formatter.parse("55.86 Q"), 5.586e31);
+        assert_eq!(formatter.try_parse("55.86 Q").unwrap(), 5.586e31);
     }
 
     #[test]
     fn should_parse_558559_63_q_as_5_5855963e35() {
         let formatter = Formatter::new();
-        assert_eq!(formatter.parse("558559.63 Q"), 5.5855963e35);
+        assert_eq!(formatter.try_parse("558559.63 Q").unwrap(), 5.5855963e35);
     }
 
     #[test]
@@ -33,6 +36,6 @@ mod parsing {
         let mut formatter = Formatter::new();
         formatter.with_decimals(3);
 
-        assert_eq!(formatter.parse("1494 k"), 1494000.0);
+        assert_eq!(formatter.try_parse("1494 k").unwrap(), 1494000.0);
     }
 }

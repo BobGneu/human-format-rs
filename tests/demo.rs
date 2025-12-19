@@ -113,7 +113,7 @@ mod demo_examples {
 
     #[test]
     fn should_allow_parsing_to_f64() {
-        assert_eq!(Formatter::new().parse("1.00 k"), 1000.0);
+        assert_eq!(Formatter::new().try_parse("1.00 k").unwrap(), 1000.0);
     }
 
     #[test]
@@ -126,7 +126,8 @@ mod demo_examples {
         assert_eq!(
             Formatter::new()
                 .with_scales(Scales::Binary())
-                .parse("1.00 ki"),
+                .try_parse("1.00 ki")
+                .unwrap(),
             1024.0
         );
     }
@@ -137,7 +138,8 @@ mod demo_examples {
             Formatter::new()
                 .with_scales(Scales::Binary())
                 .with_units("B")
-                .parse("1.00 kiB"),
+                .try_parse("1.00 kiB")
+                .unwrap(),
             1024.0
         );
     }
@@ -161,10 +163,8 @@ mod demo_examples {
             .try_parse("1.00 DN");
 
         assert!(result.is_err());
-        assert_eq!(
-            result.unwrap_err(),
-            "Unknown suffix: DN, valid suffixes are: ki, Mi, Gi, Ti, Pi, Ei, Zi, Yi, Ri, Qi"
-        );
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("Unknown suffix"));
     }
 
     #[test]

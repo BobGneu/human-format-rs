@@ -66,4 +66,35 @@ Formatter::new()
     .format(1000 as f64);
 ```
 
+## Quick Parse Examples
+
+Here are short examples demonstrating parsing and clamp behavior:
+
+```rust
+use human_format::{Formatter, Scales};
+
+// SI parsing
+let f = Formatter::new();
+assert_eq!(f.try_parse("1.00 k").unwrap(), 1000.0);
+
+// Binary parsing (ki = 1024)
+let mut fbin = Formatter::new();
+fbin.with_scales(Scales::Binary());
+assert_eq!(fbin.try_parse("1.00 ki").unwrap(), 1024.0);
+
+// Parsing with units trimmed
+let mut funit = Formatter::new();
+funit.with_units("B");
+assert_eq!(funit.try_parse("1.00 kB").unwrap(), 1000.0);
+
+// Negative numbers
+assert_eq!(Formatter::new().try_parse("-1.0 k").unwrap(), -1000.0);
+
+// parse_or_clamp: strict (errors)
+assert!(Formatter::new().parse_or_clamp("1.0 DN", false).is_err());
+
+// parse_or_clamp: clamp unknown suffix to largest multiplier
+assert!(Formatter::new().parse_or_clamp("1.0 DN", true).is_ok());
+```
+
 For more examples please consult [tests/demo.rs](https://github.com/BobGneu/human-format-rs/blob/develop/tests/demo.rs)

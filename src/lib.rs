@@ -113,8 +113,17 @@ impl Formatter {
 
     /// Formats the number into a string
     pub fn format(&self, value: f64) -> String {
+        // Handle non-finite values explicitly to avoid loops in scaling logic
+        if value.is_nan() {
+            return "NaN".to_owned();
+        }
+
         if value < 0.0 {
             return format!("-{}", self.format(value * -1.0));
+        }
+
+        if value.is_infinite() {
+            return "inf".to_owned();
         }
 
         let scaled_value = self.scales.to_scaled_value(value);
@@ -130,34 +139,61 @@ impl Formatter {
     }
 
     /// Parse a string back into a float value.
+    #[deprecated(
+        note = "Use `try_parse` which returns Result and does not panic on malformed input"
+    )]
     pub fn parse(&self, value: &str) -> f64 {
-        let v: Vec<&str> = value.split(&self.separator).collect();
-
-        let result = v.first().unwrap().parse::<f64>().unwrap();
-
-        let mut suffix = v.get(1).unwrap().to_string();
-        let new_len = suffix.len() - self.forced_units.len();
-
-        suffix.truncate(new_len);
-
-        let magnitude_multiplier = self.scales.get_magnitude_multiplier(&suffix);
-
-        result * magnitude_multiplier
+        self.try_parse(value).unwrap()
     }
 
     /// Attempt to parse a string back into a float value.
-    pub fn try_parse(&self, value: &str) -> Result<f64, String> {
-        // Remove suffix if present
+    ///
+    /// Examples:
+    ///
+    /// ```rust
+    /// use human_format::{Formatter, Scales};
+    /// // SI example
+    /// let f = Formatter::new();
+    /// assert_eq!(f.try_parse("1.00 k").unwrap(), 1000.0);
+    /// // Binary scales (ki = 1024)
+    /// let mut fbin = Formatter::new();
+    /// fbin.with_scales(Scales::Binary());
+    /// assert_eq!(fbin.try_parse("1.00 ki").unwrap(), 1024.0);
+    /// // Units preserved in input are trimmed before parsing
+    /// let mut funit = Formatter::new();
+    /// funit.with_units("B");
+    /// assert_eq!(funit.try_parse("1.00 kB").unwrap(), 1000.0);
+    /// // Negative numbers
+    /// assert_eq!(Formatter::new().try_parse("-1.0 k").unwrap(), -1000.0);
+    /// // Invalid input
+    /// assert!(Formatter::new().try_parse("bad input").is_err());
+    /// ```
+    pub fn try_parse(&self, value: &str) -> Result<f64, ParseError> {
+        let (number_str, suffix) = self.parse_components(value)?;
+        let number = number_str
+            .parse::<f64>()
+            .map_err(ParseError::InvalidNumber)?;
+        let magnitude_multiplier = self.scales.try_get_magnitude_multiplier(&suffix)?;
+
+        Ok(number * magnitude_multiplier)
+    }
+
+    fn parse_components(&self, value: &str) -> Result<(String, String), ParseError> {
+        // Remove forced units if present
         let value = value.trim_end_matches(&self.forced_units).to_string();
 
-        // Find Suffix
+        // Extract leading number (allow sign and decimal)
         let mut number = String::new();
-        for c in value.chars() {
-            if c.is_ascii_digit() || c == '.' {
+        for (i, c) in value.chars().enumerate() {
+            if c.is_ascii_digit() || c == '.' || (c == '-' && i == 0) {
                 number.push(c);
             } else {
                 break;
             }
+        }
+
+        if number.is_empty() {
+            return Err(ParseError::EmptyInput);
         }
 
         let suffix = value
@@ -165,12 +201,66 @@ impl Formatter {
             .trim_start_matches(&self.separator)
             .to_string();
 
-        let number = number.parse::<f64>().map_err(|e| e.to_string())?;
-        let magnitude_multiplier = self.scales.try_get_magnitude_multiplier(&suffix)?;
+        Ok((number, suffix))
+    }
 
-        Ok(number * magnitude_multiplier)
+    /// Parse a string and optionally clamp unknown suffixes to the largest suffix multiplier.
+    ///
+    /// If `clamp` is `false`, this behaves like `try_parse` and returns an error on unknown suffixes.
+    /// If `clamp` is `true`, unknown suffixes will be interpreted as the largest available suffix.  ///
+    /// Examples:
+    ///
+    /// ```rust
+    /// use human_format::{Formatter, Scales};
+    /// let f = Formatter::new();
+    /// // Unknown suffix errors when clamp == false
+    /// assert!(f.parse_or_clamp("1.0 DN", false).is_err());
+    /// // Unknown suffix clamps to largest suffix multiplier when clamp == true
+    /// assert!(f.parse_or_clamp("1.0 DN", true).is_ok());
+    /// // Binary example with units
+    /// let mut fb = Formatter::new();
+    /// fb.with_scales(Scales::Binary()).with_units("B");
+    /// assert_eq!(fb.parse_or_clamp("1.0 kiB", false).unwrap(), 1024.0);
+    /// // Negative number with clamp
+    /// assert_eq!(Formatter::new().parse_or_clamp("-1.0 k", true).unwrap(), -1000.0);
+    /// ```
+    pub fn parse_or_clamp(&self, value: &str, clamp: bool) -> Result<f64, ParseError> {
+        let (number_str, suffix) = self.parse_components(value)?;
+        let number = number_str
+            .parse::<f64>()
+            .map_err(ParseError::InvalidNumber)?;
+
+        match self.scales.try_get_magnitude_multiplier(&suffix) {
+            Ok(mult) => Ok(number * mult),
+            Err(ParseError::UnknownSuffix(_)) if clamp => {
+                let last_index = self.scales.suffixes.len().saturating_sub(1);
+                let mult = (self.scales.base as f64).powi(last_index as i32);
+                Ok(number * mult)
+            }
+            Err(e) => Err(e),
+        }
     }
 }
+
+/// Errors returned by parsing operations.
+#[derive(Debug, PartialEq)]
+pub enum ParseError {
+    EmptyInput,
+    InvalidNumber(std::num::ParseFloatError),
+    UnknownSuffix(String),
+}
+
+impl std::fmt::Display for ParseError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            ParseError::EmptyInput => write!(f, "Empty input"),
+            ParseError::InvalidNumber(e) => write!(f, "Invalid number: {}", e),
+            ParseError::UnknownSuffix(s) => write!(f, "Unknown suffix: {}", s),
+        }
+    }
+}
+
+impl std::error::Error for ParseError {}
 
 impl Default for Scales {
     fn default() -> Self {
@@ -246,7 +336,7 @@ impl Scales {
         self
     }
 
-    fn try_get_magnitude_multiplier(&self, value: &str) -> Result<f64, String> {
+    fn try_get_magnitude_multiplier(&self, value: &str) -> Result<f64, ParseError> {
         self.suffixes
             .iter()
             .enumerate()
@@ -258,26 +348,17 @@ impl Scales {
                 }
             })
             .ok_or_else(|| {
-                format!(
-                    "Unknown suffix: {value}, valid suffixes are: {}",
+                ParseError::UnknownSuffix(format!(
+                    "{}; valid suffixes are: {}",
+                    value,
                     self.suffixes
                         .iter()
                         .filter(|x| !x.trim().is_empty())
                         .map(String::to_string)
                         .collect::<Vec<_>>()
                         .join(", ")
-                )
+                ))
             })
-    }
-
-    fn get_magnitude_multiplier(&self, value: &str) -> f64 {
-        for ndx in 0..self.suffixes.len() {
-            if value == self.suffixes[ndx] {
-                return (self.base as f64).powi(ndx as i32);
-            }
-        }
-
-        0.0
     }
 
     fn to_scaled_value(&self, value: f64) -> ScaledValue {
@@ -285,11 +366,9 @@ impl Scales {
         let base: f64 = self.base as f64;
         let mut value = value;
 
-        loop {
-            if value < base || index == self.suffixes.len() - 1 {
-                break;
-            }
-
+        // Prevent infinite loops for non-finite values and cap index to available suffixes
+        let last_index = self.suffixes.len().saturating_sub(1);
+        while value >= base && index < last_index {
             value /= base;
             index += 1;
         }
