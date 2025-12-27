@@ -173,8 +173,7 @@ impl Formatter {
     ///
     /// This convenience wrapper unwraps the result of `try_parse` and will panic
     /// on malformed input. It is feature-gated behind `panic_parse` so that
-    /// consumers who prefer fallible parsing do not get a panicking API by
-    /// default.
+    /// consumers must opt-in to the panicking API via the panic_parse feature.
     #[cfg(feature = "panic_parse")]
     #[deprecated(
         note = "Use `try_parse`, which returns `Result<f64, ParseError>` and does not panic on malformed input"
@@ -196,7 +195,7 @@ impl Formatter {
     /// let mut fbin = Formatter::new();
     /// fbin.with_scales(Scales::Binary());
     /// assert_eq!(fbin.try_parse("1.00 ki").unwrap(), 1024.0);
-    /// // Units preserved in input are trimmed before parsing
+    /// // Units specified via with_units() are automatically stripped from input
     /// let mut funit = Formatter::new();
     /// funit.with_units("B");
     /// assert_eq!(funit.try_parse("1.00 kB").unwrap(), 1000.0);
