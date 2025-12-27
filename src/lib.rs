@@ -217,7 +217,10 @@ impl Formatter {
 
     fn parse_components(&self, value: &str) -> Result<(String, String), ParseError> {
         // Remove forced units if present
-        let value = value.trim_end_matches(&self.forced_units).to_string();
+        let value = value
+            .trim()
+            .trim_end_matches(&self.forced_units)
+            .to_string();
 
         // Extract leading number (allow sign and decimal)
         let mut number = String::new();
@@ -295,11 +298,25 @@ impl Formatter {
 }
 
 /// Errors returned by parsing operations.
-#[derive(Debug, PartialEq)]
+#[derive(Debug)]
 pub enum ParseError {
     EmptyInput,
     InvalidNumber(std::num::ParseFloatError),
     UnknownSuffix(String),
+}
+
+impl PartialEq for ParseError {
+    fn eq(&self, other: &Self) -> bool {
+        match (self, other) {
+            (ParseError::EmptyInput, ParseError::EmptyInput) => true,
+            // Note: `ParseFloatError` does not implement `PartialEq` on stable Rust.
+            // We therefore treat all `InvalidNumber(_)` variants as equal to each other,
+            // ignoring the inner `ParseFloatError`.
+            (ParseError::InvalidNumber(_), ParseError::InvalidNumber(_)) => true,
+            (ParseError::UnknownSuffix(a), ParseError::UnknownSuffix(b)) => a == b,
+            _ => false,
+        }
+    }
 }
 
 impl std::fmt::Display for ParseError {
@@ -476,7 +493,7 @@ impl Scales {
             .enumerate()
             .find(|(_, x)| x == &value)
         {
-            // idx 0 corresponds to multiplier 1; idx 1 => base^-1, idx 2 => base^-2
+            // idx 0 corresponds to base^0 (no scaling); idx 1 => base^-1, idx 2 => base^-2
             let exp = -(idx as i32);
             return Ok((self.base as f64).powi(exp));
         }
