@@ -12,7 +12,6 @@ repository = "https://github.com/BobGneu/human-format-rs"
 version = "1.1.0"
 edition = '2024'
 resolver = "2"
-im-a-teapot = false
 
 [lib]
 name = "human_format"
