@@ -15,7 +15,7 @@
 //! Print human readable strings from numbers using SI scales by default
 //!
 //! ```rust
-//! // "1.00 K"
+//! // "1.00 k"
 //! let tmpStr = human_format::Formatter::new()
 //!     .format(1000.0);
 //! # assert_eq!(tmpStr, "1.00 k");
