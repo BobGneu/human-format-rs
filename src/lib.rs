@@ -429,9 +429,9 @@ impl Scales {
         map.insert("Gyr".to_owned(), 1.0e9 * year_secs);
 
         Scales {
-            base: 60,
+            base: 1,
             suffixes: vec![],
-            suffixes_neg: vec!["".to_owned()],
+            suffixes_neg: vec![],
             explicit_map: Some(map),
         }
     }
