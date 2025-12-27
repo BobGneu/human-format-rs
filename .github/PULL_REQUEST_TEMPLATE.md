@@ -10,6 +10,7 @@ _provide a detailed explanation of the PR_
 
 -   [ ] run `cargo test` and have 0 failed or skipped test cases
 -   [ ] run `cargo fmt` and have 0 modified files
+-   [ ] run `cargo clippy -- -Dwarnings` and have 0 issues reported
 -   [ ] merge `develop` and validate that it no features are broken
 -   [ ] document new public API
 -   [ ] provide new test cases for any new/modified behavior
