@@ -265,14 +265,14 @@ mod demo_examples {
     fn forced_suffix_unknown_and_extremes() {
         // unknown forced suffix falls back
         let mut f = Formatter::new();
-        f.with_suffix("DN");
-        let s = f.format(1000.0);
-        assert_eq!(s, "1.00 k");
+        let s1 = f.with_suffix("DN").format(1000.0);
+        assert_eq!(s1, "1.00 k");
 
         // forcing very large suffix produces < 1 values
         let mut f2 = Formatter::new();
-        f2.with_suffix("Q");
-        assert!(f2.format(1e3).starts_with("0."));
+        let s2 = f2.with_suffix("Q").format(1e3);
+
+        assert_eq!(s2, "0.00 Q");
     }
 
     #[test]

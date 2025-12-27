@@ -9,7 +9,7 @@ fn forced_suffix_unknown_falls_back_to_auto() {
     // Forcing an unknown suffix should fall back to automatic scaling
     let s = f.format(1000.0);
     // automatic SI scaling for 1000 is "k"
-    assert!(s.contains("k") || s.contains("K") || s.contains(" ki") == false);
+    assert!((s.contains("k") || s.contains("K")) && !s.contains(" ki"));
 }
 
 #[test]
