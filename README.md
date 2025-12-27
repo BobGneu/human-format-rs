@@ -8,8 +8,6 @@ Rust Port of human-format from node, formatting numbers for us, while the machin
 | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 | [![Main](https://github.com/BobGneu/human-format-rs/actions/workflows/rust.yml/badge.svg?branch=main)](https://github.com/BobGneu/human-format-rs/actions/workflows/rust.yml) | [![Develop](https://github.com/BobGneu/human-format-rs/actions/workflows/rust.yml/badge.svg?branch=develop)](https://github.com/BobGneu/human-format-rs/actions/workflows/rust.yml) |
 
-# human_format
-
 `human_format` is a small Rust library that makes numbers easier for people to read. It converts large or small numbers into short strings, like turning `1_000_000` into "1.00 M".
 
 ## What it does
