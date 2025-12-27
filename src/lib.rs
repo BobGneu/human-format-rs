@@ -279,11 +279,11 @@ impl Formatter {
                 // If scales has an explicit_map (e.g., Time), clamp to the
                 // largest explicit multiplier rather than assuming a power of
                 // `base` matching the last suffix index.
-                if let Some(map) = &self.scales.explicit_map {
-                    if !map.is_empty() {
-                        let max_mult = map.values().copied().fold(f64::NEG_INFINITY, f64::max);
-                        return Ok(number * max_mult);
-                    }
+                if let Some(map) = &self.scales.explicit_map
+                    && !map.is_empty()
+                {
+                    let max_mult = map.values().copied().fold(f64::NEG_INFINITY, f64::max);
+                    return Ok(number * max_mult);
                 }
 
                 let last_index = self.scales.suffixes.len().saturating_sub(1);
@@ -474,10 +474,10 @@ impl Scales {
 
     fn try_get_magnitude_multiplier(&self, value: &str) -> Result<f64, ParseError> {
         // If an explicit mapping exists (e.g., time units), prefer it
-        if let Some(map) = &self.explicit_map {
-            if let Some(val) = map.get(value) {
-                return Ok(*val);
-            }
+        if let Some(map) = &self.explicit_map
+            && let Some(val) = map.get(value)
+        {
+            return Ok(*val);
         }
 
         // positive suffixes
