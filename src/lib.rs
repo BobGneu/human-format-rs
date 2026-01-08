@@ -191,10 +191,10 @@ impl Formatter {
     /// // SI example
     /// let f = Formatter::new();
     /// assert_eq!(f.try_parse("1.00 k").unwrap(), 1000.0);
-    /// // Binary scales (ki = 1024)
+    /// // Binary scales (Ki = 1024)
     /// let mut fbin = Formatter::new();
     /// fbin.with_scales(Scales::Binary());
-    /// assert_eq!(fbin.try_parse("1.00 ki").unwrap(), 1024.0);
+    /// assert_eq!(fbin.try_parse("1.00 Ki").unwrap(), 1024.0);
     /// // Units specified via with_units() are automatically stripped from input
     /// let mut funit = Formatter::new();
     /// funit.with_units("B");
@@ -263,7 +263,7 @@ impl Formatter {
     /// // Binary example with units
     /// let mut fb = Formatter::new();
     /// fb.with_scales(Scales::Binary()).with_units("B");
-    /// assert_eq!(fb.parse_or_clamp("1.0 kiB", false).unwrap(), 1024.0);
+    /// assert_eq!(fb.parse_or_clamp("1.0 KiB", false).unwrap(), 1024.0);
     /// // Negative number with clamp
     /// assert_eq!(Formatter::new().parse_or_clamp("-1.0 k", true).unwrap(), -1000.0);
     /// ```
@@ -384,7 +384,7 @@ impl Scales {
             base: 1024,
             suffixes: vec![
                 "".to_owned(),
-                "ki".to_owned(),
+                "Ki".to_owned(),
                 "Mi".to_owned(),
                 "Gi".to_owned(),
                 "Ti".to_owned(),

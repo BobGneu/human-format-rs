@@ -36,7 +36,7 @@ mod demo_examples {
             Formatter::new()
                 .with_scales(Scales::Binary())
                 .format(1024 as f64),
-            "1.00 ki"
+            "1.00 Ki"
         );
     }
 
@@ -47,7 +47,7 @@ mod demo_examples {
                 .with_scales(Scales::Binary())
                 .with_units("B")
                 .format(102400 as f64),
-            "100.00 kiB"
+            "100.00 KiB"
         );
     }
 
@@ -121,7 +121,7 @@ mod demo_examples {
         assert_eq!(
             Formatter::new()
                 .with_scales(Scales::Binary())
-                .try_parse("1.00 ki")
+                .try_parse("1.00 Ki")
                 .unwrap(),
             1024.0
         );
@@ -133,7 +133,7 @@ mod demo_examples {
             Formatter::new()
                 .with_scales(Scales::Binary())
                 .with_units("B")
-                .try_parse("1.00 kiB")
+                .try_parse("1.00 KiB")
                 .unwrap(),
             1024.0
         );
@@ -145,7 +145,7 @@ mod demo_examples {
             Formatter::new()
                 .with_scales(Scales::Binary())
                 .with_units("B")
-                .try_parse("1.00 kiB"),
+                .try_parse("1.00 KiB"),
             Ok(1024.0)
         );
     }
