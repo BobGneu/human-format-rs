@@ -13,7 +13,7 @@ fn binary_and_units_examples() {
             .with_scales(Scales::Binary())
             .with_units("B")
             .format(102400.0),
-        "100.00 kiB"
+        "100.00 KiB"
     );
     assert_eq!(
         Formatter::new()
