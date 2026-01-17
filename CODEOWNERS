@@ -1,0 +1,6 @@
+# CODEOWNERS for human-format-rs
+# Format: <file pattern> <owner> [<owner>...]
+# Use GitHub usernames or team names. Adjust as needed.
+
+# Default owner for the repository
+/* @BobGneu
