@@ -12,6 +12,7 @@ repository = "https://github.com/BobGneu/human-format-rs"
 version = "1.2.1"
 edition = "2024"
 resolver = "2"
+rust-version = "1.88.0"
 
 [lib]
 name = "human_format"

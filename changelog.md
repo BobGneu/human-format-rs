@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+
+- set cargo `rust-version` to `1.88`
+
 ## [1.2.1] - 2026-01-16
 
 ### Fixed
@@ -36,6 +40,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Replaced silent clamping/0.0 multiplier lookup with explicit `try_get_magnitude_multiplier` returning error on unknown suffix
 - Refactored parsing internals to centralize numeric/suffix extraction and reduce duplication
 - Added edge-case tests (empty input, trailing garbage, comma-decimal behavior, NaN/Infinity, rounding boundaries, and very large magnitudes)
+- Bump cargo `edition` to `2024`
 
 ### Removed
 
