@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
-- set cargo `rust-version` to `1.88`
+- set cargo `rust-version` to `1.88.0`
 
 ## [1.2.1] - 2026-01-16
 
