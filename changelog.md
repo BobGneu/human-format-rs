@@ -7,9 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.2.2] - 2026-04-08
+
 ### Changed
 
-- set cargo `rust-version` to `1.88`
+- set cargo `rust-version` to `1.88.0`
 
 ## [1.2.1] - 2026-01-16
 
@@ -81,7 +83,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Initial Release
 
-[unreleased]: https://github.com/BobGneu/human-format-rs/compare/1.2.1...develop
+[unreleased]: https://github.com/BobGneu/human-format-rs/compare/1.2.2...develop
+[1.2.2]: https://github.com/BobGneu/human-format-rs/compare/1.2.1...1.2.2
 [1.2.1]: https://github.com/BobGneu/human-format-rs/compare/1.2.0...1.2.1
 [1.2.0]: https://github.com/BobGneu/human-format-rs/compare/1.1.0...1.2.0
 [1.1.0]: https://github.com/BobGneu/human-format-rs/compare/1.0.3...1.1.0
